@@ -1,0 +1,14 @@
+//memory requirement (int)
+2354421
+
+calculator
+
+
+I/O
+CALCULATE 235
+I/O
+YIELD
+CALCULATE 187
+OUT
+
+EXE
