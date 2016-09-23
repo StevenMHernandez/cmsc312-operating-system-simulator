@@ -1,0 +1,17 @@
+pcb memoryrequirements 1337
+pcb programcounter
+pcb schedulingthing
+pcb flags
+pcb state
+//information to be added into the PCB containing information for the process
+//load command? to store
+
+//operations to simulate the running of program
+calculate 1337 //total run time of the program
+out
+io 
+yield
+out
+
+//end of job file signalling to execute lines and name of process
+exe wordprocessor
