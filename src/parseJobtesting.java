@@ -5,23 +5,30 @@ public class parseJobtesting {
   
   private String inputfile = "input.txt";
   private LinkedList<String> queue = new LinkedList<String>();
+  private File file = new File(inputfile);
+  private Scanner input;
   
-  public parseJobtesting(String inputfile) {
-    this.inputfile = inputfile;
+  public parseJobtesting(String filename){
+    this.inputfile = filename;
+    parse();
   }
   
   public parseJobtesting() {
     
   }
   
-  public void parse() throws IOException {
+  public void setFile(String filename){
+    this.inputfile = filename;
+    parse();
+  }
   
-    File file = new File(inputfile);
-    Scanner input = new Scanner(file);
-  
-    while(input.hasNext()) {
-      queue.add(input.next());
-    }
+  private void parse() {
+    try {
+      input = new Scanner(file);
+      while(input.hasNext()) {
+        queue.add(input.next());
+      }
+    } catch (Exception e) { System.out.println("uh what do i put here"); }
     input.close();
   }
   
