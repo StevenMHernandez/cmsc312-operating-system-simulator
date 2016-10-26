@@ -2,6 +2,10 @@ package Components;
 
 public class Scheduler {
 
+    public static int MAX_CPU_TIME = 10;
+
+    private int currentProcessTime = 0;
+
     public void insertPCB(Process process){
     	
     }
@@ -19,7 +23,7 @@ public class Scheduler {
     }
     
     public int getWait(Process process){
-    	return null;
+    	return 0;
     }
     
     public void setWait(Process process, int waitIn){
@@ -27,7 +31,7 @@ public class Scheduler {
     }
     
     public int getArrival(Process process){
-    	return null;
+    	return 0;
     }
     
     public void setArrival(Process process, int waitIn){
@@ -35,10 +39,14 @@ public class Scheduler {
     }
     
     public int getCPUTime(Process process){
-    	return null;
+    	return 0;
     }
-    
+
     public void setCPUTime(Process process, int waitIn){
-    	
+
+    }
+
+    public void addCPUTime(int time){
+        currentProcessTime += time;
     }
 }
