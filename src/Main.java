@@ -3,8 +3,11 @@ import Components.Process;
 import Components.ProcessState;
 import Components.Scheduler;
 
+import javafx.application.Application;
+
 public class Main {
     public static void main(String[] args) {
+        Application.launch(Gui.class, args);
         Scheduler scheduler = new Scheduler();
         InterruptProcessor interruptProcessor = new InterruptProcessor();
 
