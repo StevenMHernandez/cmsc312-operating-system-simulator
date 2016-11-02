@@ -1,3 +1,5 @@
+package Gui;
+
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.geometry.*;

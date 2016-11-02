@@ -3,6 +3,7 @@ import Components.Process;
 import Components.ProcessState;
 import Components.Scheduler;
 
+import Gui.Gui;
 import javafx.application.Application;
 
 public class Main {
