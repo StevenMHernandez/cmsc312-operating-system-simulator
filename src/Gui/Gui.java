@@ -1,5 +1,7 @@
 package Gui;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.input.KeyCode;
@@ -31,6 +33,16 @@ public class Gui extends Application {
         button.setText("test");
         button.setOnAction(e -> displayBox.display("displaybox", "hi does this work"));
 
+        /*
+        TableView<Integer> processTable = new TableView<>();
+        ObservableList<Integer> processes = FXCollections.observableArrayList();
+        processTable.setItems(processes);
+
+        TableColumn processColumn = new TableColumn("Processes);
+        processTable.getColumns.addAll(processColumn);
+        */
+
+
         textInput = new TextField("temporarily out of order");
         textInput.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -47,6 +59,7 @@ public class Gui extends Application {
         lowerbox.setSpacing(10);
         lowerbox.getChildren().addAll(textInput, button);
         layout.setBottom(lowerBox);
+        //layout.setRight(processTable);
 
         Scene scene = new Scene(layout, 300, 200);
         window.setScene(scene);
