@@ -34,11 +34,12 @@ public class Gui extends Application {
         button.setOnAction(e -> displayBox.display("displaybox", "hi does this work"));
 
         /*
-        TableView<Integer> processTable = new TableView<>();
-        ObservableList<Integer> processes = FXCollections.observableArrayList();
+        TableView<Process> processTable = new TableView<>();
+        ObservableList<Process> processes = FXCollections.observableArrayList();
         processTable.setItems(processes);
 
-        TableColumn processColumn = new TableColumn("Processes);
+        TableColumn<Process, String> processColumn = new TableColumn("Processes");
+        processColumn.setMinWidth(randomnumber);
         processTable.getColumns.addAll(processColumn);
         */
 
