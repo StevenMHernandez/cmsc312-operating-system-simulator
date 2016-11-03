@@ -7,11 +7,11 @@ public class Scheduler {
 
     private int currentProcessTime = 0;
     
-    private ArrayList<Process> queue = new ArrayList<Process>();
+    private ArrayList<Process> queue = new ArrayList<>();
 
     public void insertPCB(Process process){
     	queue.add(process);
-    	processsetWait(getClock());
+//    	processsetWait(getClock());
     }
     
     public void removePCB(Process process){
@@ -19,19 +19,16 @@ public class Scheduler {
     	currentProcessTime = 0;
     }
     
-    public String getState(Process process){
-    	//state is a part of process. why not just use process.getState()?
-    	String state = process.getState();
-    	return state;
+    public ProcessState getState(Process process){
+    	return process.getState();
     }
     
-    public void setState(Process process, String stateIn){
+    public void setState(Process process, ProcessState stateIn){
     	process.setState(stateIn);
     }
     
     public int getWait(Process process){
-    	int wait = process.getWait();
-    	return wait;
+        return process.getWait();
     }
     
     public void setWait(Process process, int waitIn){
@@ -39,8 +36,7 @@ public class Scheduler {
     }
     
     public int getArrival(Process process){
-    	int arrival = process.getArrival();
-    	return arrival;
+    	return process.getArrival();
     }
     
     public void setArrival(Process process, int arrivalIn){

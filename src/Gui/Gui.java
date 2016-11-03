@@ -54,11 +54,11 @@ public class Gui extends Application {
             }
         });
 
-        layout = new Borderpane();
+        layout = new BorderPane();
         lowerBox = new HBox();
-        lowerbox.setPadding(new Insets(10, 10, 10, 10));
-        lowerbox.setSpacing(10);
-        lowerbox.getChildren().addAll(textInput, button);
+        lowerBox.setPadding(new Insets(10, 10, 10, 10));
+        lowerBox.setSpacing(10);
+        lowerBox.getChildren().addAll(textInput, button);
         layout.setBottom(lowerBox);
         //layout.setRight(processTable);
 

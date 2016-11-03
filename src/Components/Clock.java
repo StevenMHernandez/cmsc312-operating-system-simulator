@@ -13,7 +13,6 @@ public class Clock {
     }
     
     public int advanceClock() {
-    	tick++;
-    	//return new value?
+        return tick++;
     }
 }
