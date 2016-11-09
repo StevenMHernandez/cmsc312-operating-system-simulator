@@ -7,11 +7,14 @@ import javafx.application.Application;
 public class Main {
     public static void main(String[] args) {
         Application.launch(Gui.class, args);
+
         Scheduler scheduler = new Scheduler();
         InterruptProcessor interruptProcessor = new InterruptProcessor();
 
-        boolean exeContinuously = true; // should we run the simulator continuously
-        int exeSteps = -1; // should we run the simulator for a certain amount of steps?
+        // should we run the simulator continuously
+        boolean exeContinuously = true;
+        // should we run the simulator for a certain number of steps/clock cycles?
+        int exeSteps = -1;
 
         while (true) {
             if (!exeContinuously && exeSteps == 0) {
@@ -31,7 +34,7 @@ public class Main {
                 scheduler.setState(currentProcess, ProcessState.RUN);
 
                 if (currentProcess.getQueue().isEmpty()) {
-                    currentProcess.setState(ProcessState.EXIT);
+                    scheduler.setState(currentProcess, ProcessState.EXIT);
 
                     interruptProcessor.signalInterrupt();
                     return;
@@ -52,7 +55,7 @@ public class Main {
                     // check if the command needs us to do anything specific
                     switch (nextCommand) {
                         case "IO":
-                            currentProcess.setState(ProcessState.WAIT);
+                            scheduler.setState(currentProcess, ProcessState.WAIT);
 
                             // RequestRandomIO(currentProcess)
 
@@ -66,7 +69,7 @@ public class Main {
                     scheduler.addCPUTime(1);
 
                     if (scheduler.getCPUTime(currentProcess) > Scheduler.MAX_CPU_TIME) {
-                        currentProcess.setState(ProcessState.READY);
+                        scheduler.setState(currentProcess, ProcessState.READY);
 
                         interruptProcessor.signalInterrupt();
                         return;
