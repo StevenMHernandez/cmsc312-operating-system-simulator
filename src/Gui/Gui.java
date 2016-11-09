@@ -9,6 +9,7 @@ import Components.InterruptProcessor;
 import Components.Process;
 import Components.ProcessState;
 import Components.Scheduler;
+import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -51,10 +52,6 @@ public class Gui extends Application {
         button.setText("test");
         button.setOnAction(e -> displayBox.display("displaybox", "hi does this work"));
 
-        System.out.println(processList.toString());
-
-        System.out.println("ok..");
-
         TableView<Process> processTable = new TableView<>();
         ObservableList<Process> processList = FXCollections.observableArrayList();
         processTable.setItems(processList);
@@ -68,8 +65,6 @@ public class Gui extends Application {
         statusCol.setCellValueFactory(new PropertyValueFactory<Process, String>("status"));
 
         this.processList.setAll(Scheduler.getQueue().stream().collect(Collectors.toList()));
-
-        System.out.println(this.processList.toString());
 
         table = new TableView();
 
@@ -100,8 +95,6 @@ public class Gui extends Application {
 
         window.show();
 
-        System.out.println("gigigi");
-
         startup();
     }
 
@@ -124,18 +117,16 @@ public class Gui extends Application {
 
         this.processList.setAll(Scheduler.getQueue().stream().collect(Collectors.toList()));
 
-        System.out.println(this.processList);
 
-        // TODO: figure out how we get a loop working with JavaFX
-        // it seems that the window does not show if we have an infinite loop running
-        //        while (true) {
-        //            loop();
-        //        }
-
-        loop();
-        loop();
-        scheduler.insertPCB(new Process(commands));
-        loop();
+        new AnimationTimer() {
+            @Override public void handle(long currentNanoTime) {
+                try {
+                    loop();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
     }
 
     public void loop() throws InterruptedException {
@@ -149,12 +140,8 @@ public class Gui extends Application {
             scheduler.getNextPCB();
         }
 
-        System.out.println(scheduler.getCurrentPCB());
-
-
         // there may not be any more processList from the scheduler
         if (null != scheduler.getCurrentPCB()) {
-            System.out.println("okokok");
             Process currentProcess = scheduler.getCurrentPCB();
 
             scheduler.setState(currentProcess, ProcessState.RUN);
@@ -201,8 +188,7 @@ public class Gui extends Application {
         }
 
         CPU.advanceClock();
-        System.out.println(Clock.getClock());
-        Thread.sleep(300);
+        Thread.sleep(1000);
 
         // GUI
         this.processList.setAll(Scheduler.getQueue().stream().collect(Collectors.toList()));
