@@ -9,9 +9,19 @@ public class Process {
 
     private ArrayList<String> queue;
 
+    public String name = "Process Name";
+
     public Process(ArrayList<String> queue) {
         this.queue = queue;
         this.state = ProcessState.NEW;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getStatus() {
+        return this.state.toString();
     }
 
     public ArrayList<String> getQueue() {

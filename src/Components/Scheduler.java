@@ -8,7 +8,7 @@ public class Scheduler {
 
     private int currentProcessTime = 0;
 
-    private ArrayList<Process> queue = new ArrayList<>();
+    private static ArrayList<Process> queue = new ArrayList<>();
 
     Process currentProcess = null;
 
@@ -17,8 +17,8 @@ public class Scheduler {
     }
 
     public Process getNextPCB() {
-        for (Process process : this.queue) {
-            if (process.getState() == ProcessState.READY) {
+        for (Process process : queue) {
+            if (process.getState() == ProcessState.READY || process.getState() == ProcessState.NEW) {
                 this.currentProcess = process;
 
                 return this.currentProcess;
@@ -48,8 +48,8 @@ public class Scheduler {
 
     public void setState(Process process, ProcessState stateIn) {
         if (stateIn == ProcessState.READY) {
-            this.queue.remove(0);
-            this.queue.add(process);
+            queue.remove(0);
+            queue.add(process);
         } else if (stateIn == ProcessState.EXIT) {
             this.removePCB(currentProcess);
             this.currentProcess = null;
@@ -76,5 +76,9 @@ public class Scheduler {
 
     public void addCPUTime(int time) {
         currentProcessTime += time;
+    }
+
+    public static ArrayList<Process> getQueue() {
+        return queue;
     }
 }
