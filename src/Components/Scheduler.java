@@ -9,13 +9,28 @@ public class Scheduler {
     
     private ArrayList<Process> queue = new ArrayList<>();
 
+    Process currentProcess = null;
+
+    public Process getCurrentPCB() {
+        return currentProcess;
+    }
+
+    public Process getNextPCB() {
+        // TODO: we could pick based on the arrival time of the process
+        this.currentProcess = queue.isEmpty() ? null : queue.get(0);
+
+        return this.currentProcess;
+    }
+
     public void insertPCB(Process process){
+        setArrival(process);
+
     	queue.add(process);
-//    	processsetWait(getClock());
     }
     
     public void removePCB(Process process){
     	queue.remove(process);
+
     	currentProcessTime = 0;
     }
     
@@ -24,31 +39,28 @@ public class Scheduler {
     }
     
     public void setState(Process process, ProcessState stateIn){
+        if (stateIn == ProcessState.EXIT) {
+            this.removePCB(currentProcess);
+            this.currentProcess = null;
+        }
+
     	process.setState(stateIn);
     }
     
     public int getWait(Process process){
         return process.getWait();
     }
-    
-    public void setWait(Process process, int waitIn){
-    	process.setWait(waitIn);
-    }
-    
+
     public int getArrival(Process process){
     	return process.getArrival();
     }
-    
-    public void setArrival(Process process, int arrivalIn){
-    	process.setArrival(arrivalIn);
+
+    public void setArrival(Process process){
+    	process.setArrival(Clock.getClock());
     }
     
     public int getCPUTime(Process process){
-    	return 0;
-    }
-
-    public void setCPUTime(Process process, int waitIn){
-    	//currentProcessTime = waitIn;?
+    	return currentProcessTime;
     }
 
     public void addCPUTime(int time){

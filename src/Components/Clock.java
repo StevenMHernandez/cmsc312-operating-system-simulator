@@ -2,17 +2,17 @@ package Components;
 
 public class Clock {
     
-	private int tick;
+	private static int tick = 0;
 	
-    public void execute(){
-    	
+    public static void execute(){
+        // nothing to execute
     }
     
-    public int getClock(){
+    public static int getClock(){
     	return tick;
     }
     
-    public int advanceClock() {
+    public static int advanceClock() {
         return tick++;
     }
 }

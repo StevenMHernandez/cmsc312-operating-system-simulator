@@ -1,13 +1,15 @@
 package Components;
 
+import java.util.ArrayList;
+
 public class ExecutionQueue {
+    private ArrayList<Event> queue = new ArrayList<>();
 
     public void enQueue(Event event) {
-
+        queue.add(event);
     }
 
     Event deQueue() {
-        return null;
+        return queue.remove(0);
     }
-
 }

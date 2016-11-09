@@ -1,13 +1,21 @@
 package Components;
 
+import java.util.ArrayList;
+
 public class Process {
     private ProcessState state;
     
     private int arrival;
-    private int wait;
 
-    public Process() {
+    private ArrayList<String> queue;
+
+    public Process(ArrayList<String> queue) {
+        this.queue = queue;
         this.state = ProcessState.NEW;
+    }
+
+    public ArrayList<String> getQueue() {
+        return queue;
     }
 
     public ProcessState getState() {
@@ -27,11 +35,6 @@ public class Process {
     }
     
     public int getWait() {
-    	//return getClock() - arrival;? 
-    	return wait;
-    }
-    
-    public void setWait(int waitIn) {
-    	this.wait = waitIn;
+    	return Clock.getClock() - arrival;
     }
 }

@@ -1,8 +1,6 @@
-import Components.InterruptProcessor;
-import Components.Process;
-import Components.ProcessState;
-import Components.Scheduler;
+import Components.*;
 
+import Components.Process;
 import Gui.Gui;
 import javafx.application.Application;
 
@@ -12,12 +10,9 @@ public class Main {
         Scheduler scheduler = new Scheduler();
         InterruptProcessor interruptProcessor = new InterruptProcessor();
 
-        Process currentProcess = null;
-        boolean interrupted = false;
         boolean exeContinuously = true; // should we run the simulator continuously
         int exeSteps = -1; // should we run the simulator for a certain amount of steps?
 
-        // TODO: every Clock-tick:
         while (true) {
             if (!exeContinuously && exeSteps == 0) {
                 return;
@@ -25,37 +20,58 @@ public class Main {
                 exeSteps--;
             }
 
-            if (null != currentProcess) {
-                // currentProcess = get next process from Scheduler
+            if (null != scheduler.getCurrentPCB()) {
+                scheduler.getNextPCB();
             }
 
-            // there may not be any more processes from the sceduler
-            if (null != currentProcess) {
-                // read next line from our process's queue. (dequeue)
+            // there may not be any more processes from the scheduler
+            if (null != scheduler.getCurrentPCB()) {
+                Process currentProcess = scheduler.getCurrentPCB();
 
-                // TODO: check if line asks for user IO
-                if (true) {
-                    currentProcess.setState(ProcessState.WAIT);
-                    // RequestRandomIO(currentProcess)
-                    interruptProcessor.signalInterrupt();
-                }
+                scheduler.setState(currentProcess, ProcessState.RUN);
 
-                // TODO: check if there are no items left in this process's queue
-                if (true) {
+                if (currentProcess.getQueue().isEmpty()) {
                     currentProcess.setState(ProcessState.EXIT);
+
                     interruptProcessor.signalInterrupt();
+                } else {
+                    // read next line from our process's queue. (dequeue)
+                    String nextCommand = currentProcess.getQueue().remove(0);
+
+                    // check if the command has parameters we should read (remove from the queue)
+                    switch (nextCommand) {
+                        case "CALCULATE":
+                        case "OUT":
+                            currentProcess.getQueue().remove(0);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    // check if the command needs us to do anything specific
+                    switch (nextCommand) {
+                        case "IO":
+                            currentProcess.setState(ProcessState.WAIT);
+
+                            // RequestRandomIO(currentProcess)
+
+                            interruptProcessor.signalInterrupt();
+                            break;
+                        default:
+                            break;
+                    }
+
+                    // add time to Process CPU_Time
+                    scheduler.addCPUTime(1);
+
+                    if (scheduler.getCPUTime(currentProcess) > Scheduler.MAX_CPU_TIME) {
+                        currentProcess.setState(ProcessState.READY);
+
+                        interruptProcessor.signalInterrupt();
+                    }
                 }
 
-                // add time to Process CPU_Time
-                scheduler.addCPUTime(1);
-
-                if (scheduler.getCPUTime(currentProcess) > Scheduler.MAX_CPU_TIME) {
-                    currentProcess.setState(ProcessState.READY);
-                    interruptProcessor.signalInterrupt();
-                }
-
-                // advance the clock // Clock.advanceClock()
-                // Next Clock tick, go back to the top of the loop
+                Clock.advanceClock();
             }
         }
     }
