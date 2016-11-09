@@ -1,16 +1,18 @@
 package Components;
 
 public class CPU {
+    public static int advanceClock() {
+        InterruptProcessor.interrupted = false;
 
-    public void advanceClock() {
-
+        return Clock.advanceClock();
     }
 
-    public void detectInterrupt() {
-
+    public static boolean detectInterrupt() {
+        return InterruptProcessor.interrupted;
     }
 
-    public void detectPreemption() {
-
+    public static boolean detectPreemption() {
+        // TODO
+        return false;
     }
 }

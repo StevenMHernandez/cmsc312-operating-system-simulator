@@ -34,6 +34,7 @@ public class Main {
                     currentProcess.setState(ProcessState.EXIT);
 
                     interruptProcessor.signalInterrupt();
+                    return;
                 } else {
                     // read next line from our process's queue. (dequeue)
                     String nextCommand = currentProcess.getQueue().remove(0);
@@ -56,7 +57,7 @@ public class Main {
                             // RequestRandomIO(currentProcess)
 
                             interruptProcessor.signalInterrupt();
-                            break;
+                            return;
                         default:
                             break;
                     }
@@ -68,10 +69,11 @@ public class Main {
                         currentProcess.setState(ProcessState.READY);
 
                         interruptProcessor.signalInterrupt();
+                        return;
                     }
                 }
 
-                Clock.advanceClock();
+                CPU.advanceClock();
             }
         }
     }
