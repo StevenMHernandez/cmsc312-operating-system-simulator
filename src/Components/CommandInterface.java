@@ -27,7 +27,7 @@ public class CommandInterface {
     }
     
     private void chooseCommand(String command, String value) {
-      if(command == "load")
+      if(command == "load") //use .equalsTo?
         load(value);
     }
 
