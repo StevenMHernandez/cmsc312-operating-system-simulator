@@ -117,13 +117,21 @@ public class Gui extends Application {
 
         this.processList.setAll(Scheduler.getQueue().stream().collect(Collectors.toList()));
 
+        final long[] prevTime = {0};
 
         new AnimationTimer() {
             @Override public void handle(long currentNanoTime) {
-                try {
-                    loop();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if (currentNanoTime > prevTime[0] + 1000000000) {
+                    System.out.println(currentNanoTime);
+                    System.out.println(prevTime[0]);
+
+                    try {
+                        loop();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    prevTime[0] = currentNanoTime + 1000000000;
                 }
             }
         }.start();
@@ -188,7 +196,6 @@ public class Gui extends Application {
         }
 
         CPU.advanceClock();
-        Thread.sleep(1000);
 
         // GUI
         this.processList.setAll(Scheduler.getQueue().stream().collect(Collectors.toList()));
