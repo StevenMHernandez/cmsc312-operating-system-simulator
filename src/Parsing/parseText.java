@@ -1,25 +1,33 @@
+package Parsing;
+
 import java.util.*;
 import java.io.*;
 
-public class parseJobtesting {
+public class parseText {
 
     private String inputfile = "input.txt";
     private LinkedList<String> queue = new LinkedList<String>();
     private File file = new File(inputfile);
     private Scanner input;
+    public String command, value;
 
-    public parseJobtesting(String filename){
-        this.inputfile = filename;
-        parse();
-    }
-
-    public parseJobtesting() {
+    public parseText() {
 
     }
 
-    public void setFile(String filename){
+    public void parseFile(String filename){
         this.inputfile = filename;
         parse();
+    }
+    
+    public void parseLine(String command) {
+      command.toLowerCase();
+      input = new Scanner(command);
+      command = input.next();
+      value = null;
+      if(input.hasNext())
+        value = input.next();
+      input.close();
     }
 
     private void parse() {
@@ -31,7 +39,11 @@ public class parseJobtesting {
         } catch (Exception e) { System.out.println("uh what do i put here"); }
         input.close();
     }
-
+    
+    public LinkedList<String> getStuff() {
+      return queue;
+    }
+    
     public void testprint() {
 
         while(queue.peek() != null) {
