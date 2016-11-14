@@ -39,6 +39,7 @@ public class Gui extends Application {
 
     private final ObservableList<Process> processList = FXCollections.observableArrayList();
     private Scheduler scheduler;
+    private CPU cpu;
     private InterruptProcessor interruptProcessor;
     private boolean exeContinuously = true;
     private int exeSteps = -1;
@@ -100,6 +101,7 @@ public class Gui extends Application {
 
     public void startup() throws InterruptedException {
         scheduler = new Scheduler();
+        cpu = new CPU();
         interruptProcessor = new InterruptProcessor();
 
         // TODO: remove this test process
@@ -108,6 +110,7 @@ public class Gui extends Application {
         commands.add("33");
         commands.add("CALCULATE");
         commands.add("33");
+        commands.add("IO");
         commands.add("CALCULATE");
         commands.add("33");
 
@@ -118,6 +121,7 @@ public class Gui extends Application {
         this.processList.setAll(Scheduler.getQueue().stream().collect(Collectors.toList()));
 
         final long[] prevTime = {0};
+
 
         new AnimationTimer() {
             @Override public void handle(long currentNanoTime) {
@@ -144,18 +148,18 @@ public class Gui extends Application {
             exeSteps--;
         }
 
-        if (null == scheduler.getCurrentPCB()) {
-            scheduler.getNextPCB();
+        if (null == cpu.getCurrentPCB()) {
+            cpu.setCurrentPCB(scheduler.getNextPCB());
         }
 
         // there may not be any more processList from the scheduler
-        if (null != scheduler.getCurrentPCB()) {
-            Process currentProcess = scheduler.getCurrentPCB();
+        if (null != cpu.getCurrentPCB()) {
+            Process currentProcess = cpu.getCurrentPCB();
 
-            scheduler.setState(currentProcess, ProcessState.RUN);
+            cpu.setState(scheduler, ProcessState.RUN);
 
             if (currentProcess.getQueue().isEmpty()) {
-                scheduler.setState(currentProcess, ProcessState.EXIT);
+                cpu.setState(scheduler, ProcessState.EXIT);
 
                 interruptProcessor.signalInterrupt();
             } else {
@@ -175,7 +179,7 @@ public class Gui extends Application {
                 // check if the command needs us to do anything specific
                 switch (nextCommand) {
                     case "IO":
-                        scheduler.setState(currentProcess, ProcessState.WAIT);
+                        cpu.setState(scheduler, ProcessState.WAIT);
 
                         // RequestRandomIO(currentProcess)
 
@@ -185,10 +189,10 @@ public class Gui extends Application {
                 }
 
                 // add time to Process CPU_Time
-                scheduler.addCPUTime(1);
+                cpu.addCPUTime(1);
 
-                if (scheduler.getCPUTime(currentProcess) > Scheduler.MAX_CPU_TIME) {
-                    scheduler.setState(currentProcess, ProcessState.READY);
+                if (cpu.getCPUTime(currentProcess) > cpu.MAX_CPU_TIME) {
+                    cpu.setState(scheduler, ProcessState.READY);
 
                     interruptProcessor.signalInterrupt();
                 }
