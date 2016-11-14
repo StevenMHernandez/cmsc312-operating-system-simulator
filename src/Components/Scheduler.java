@@ -4,28 +4,15 @@ import java.util.ArrayList;
 
 public class Scheduler {
 
-    public static int MAX_CPU_TIME = 10;
-
-    private int currentProcessTime = 0;
-
     private static ArrayList<Process> queue = new ArrayList<>();
-
-    Process currentProcess = null;
-
-    public Process getCurrentPCB() {
-        return currentProcess;
-    }
 
     public Process getNextPCB() {
         for (Process process : queue) {
             if (process.getState() == ProcessState.READY || process.getState() == ProcessState.NEW) {
-                this.currentProcess = process;
-
-                return this.currentProcess;
+                removePCB(process);
+                return process;
             }
         }
-
-        this.currentProcess = null;
 
         return null;
     }
@@ -38,8 +25,6 @@ public class Scheduler {
 
     public void removePCB(Process process) {
         queue.remove(process);
-
-        currentProcessTime = 0;
     }
 
     public ProcessState getState(Process process) {
@@ -51,8 +36,7 @@ public class Scheduler {
             queue.remove(0);
             queue.add(process);
         } else if (stateIn == ProcessState.EXIT) {
-            this.removePCB(currentProcess);
-            this.currentProcess = null;
+            this.removePCB(process);
         }
 
         process.setState(stateIn);
@@ -68,14 +52,6 @@ public class Scheduler {
 
     public void setArrival(Process process) {
         process.setArrival(Clock.getClock());
-    }
-
-    public int getCPUTime(Process process) {
-        return currentProcessTime;
-    }
-
-    public void addCPUTime(int time) {
-        currentProcessTime += time;
     }
 
     public static ArrayList<Process> getQueue() {
