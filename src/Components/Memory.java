@@ -3,7 +3,7 @@ package Components;
 public class Memory {
 
     private final int totalMemory;
-    private int usedMemory;
+    private int usedMemory = 0;
 
     public Memory(int memory) {
         totalMemory = memory;
