@@ -2,8 +2,30 @@ package Components;
 
 public class Memory {
 
-    private int totalMemory;
+    private final int totalMemory;
     private int usedMemory;
+
+    public Memory(int memory) {
+        totalMemory = memory;
+    }
+
+    public Memory() {
+
+    }
+
+    public void setTotalMemory(int value) {
+        totalMemory = value;
+    }
+
+    public int addUsedMemory(int value) {
+        usedMemory = usedMemory + value;
+        return usedMemory;
+    }
+
+    public int decreaseUsedMemory(int value) {
+        usedMemory = usedMemory - value;
+        return usedMemory;
+    }
 
     public int getTotalMemory() {
         return totalMemory;
