@@ -24,6 +24,8 @@ public class Memory {
 
     public int decreaseUsedMemory(int value) {
         usedMemory = usedMemory - value;
+        if(usedMemory < 0)
+            usedMemory = 0;
         return usedMemory;
     }
 
