@@ -5,15 +5,15 @@ public class Memory {
     private int totalMemory;
     private int usedMemory;
 
-    public int getTotalMemory {
+    public int getTotalMemory() {
         return totalMemory;
     }
 
-    public int getUsedMemory {
+    public int getUsedMemory() {
         return usedMemory;
     }
 
-    public int getFreeMemory {
+    public int getFreeMemory() {
         return totalMemory - usedMemory;
     }
 
