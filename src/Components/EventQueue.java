@@ -1,14 +1,14 @@
 package Components;
-import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 public class EventQueue {
-	private ArrayList<Event> queue = new ArrayList<>();
+	private PriorityQueue<Event> queue = new PriorityQueue<>();
 	
     public void enQueue(Event event) {
     	queue.add(event);
     }
 
     Event deQueue() {
-        return queue.remove(0);
+        return queue.poll();
     }
 }

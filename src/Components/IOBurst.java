@@ -2,7 +2,7 @@ package Components;
 
 public class IOBurst {
 
-    public void generateIOBurst() {
-
+    public int generateIOBurst(int remaining) {
+        return remaining --;
     }
 }

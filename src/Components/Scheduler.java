@@ -4,27 +4,47 @@ import java.util.ArrayList;
 
 public class Scheduler {
 
-    private static ArrayList<Process> queue = new ArrayList<>();
+    //private int freeMemory = 256;
+    private static ArrayList<Process> readyQueue = new ArrayList<>();
+    private static ArrayList<Process> waitingQueue = new ArrayList<>();
 
     public Process getNextPCB() {
-        for (Process process : queue) {
-            if (process.getState() == ProcessState.READY || process.getState() == ProcessState.NEW) {
-                removePCB(process);
-                return process;
-            }
-        }
+        Process next =  readyQueue.remove(0);
+        //freeMemory += next.getSize();
 
-        return null;
+        return next;
+
     }
 
-    public void insertPCB(Process process) {
+    public void insertReadyPCB(Process process) {
+        setArrival(process);
+        readyQueue.add(process);
+
+        /*
+        if (process.getSize() < freeMemory) {
+            setArrival(process);
+
+            readyQueue.add(process);
+            freeMemory -= process.getSize();
+        } else {
+            insertWaitingPCB(process);
+        }
+        */
+    }
+
+    public void insertWaitingPCB(Process process) {
         setArrival(process);
 
-        queue.add(process);
+        waitingQueue.add(process);
     }
 
-    public void removePCB(Process process) {
-        queue.remove(process);
+    public void removeReadyPCB(Process process) {
+        readyQueue.remove(process);
+        //freeMemory += process.getSize();
+    }
+
+    public void removeWaitingPCB(Process process) {
+        waitingQueue.remove(process);
     }
 
     public ProcessState getState(Process process) {
@@ -33,10 +53,16 @@ public class Scheduler {
 
     public void setState(Process process, ProcessState stateIn) {
         if (stateIn == ProcessState.READY) {
-            queue.remove(0);
-            queue.add(process);
+            readyQueue.remove(0);
+            readyQueue.add(process);
+        }else if(stateIn == ProcessState.WAIT) {
+            process.setState((stateIn));
+            insertWaitingPCB(process);
         } else if (stateIn == ProcessState.EXIT) {
-            this.removePCB(process);
+            if (process.getState() == ProcessState.READY )
+                removeReadyPCB(process);
+            else if (process.getState() == ProcessState.WAIT)
+                removeWaitingPCB(process);
         }
 
         process.setState(stateIn);
@@ -54,7 +80,11 @@ public class Scheduler {
         process.setArrival(Clock.getClock());
     }
 
-    public static ArrayList<Process> getQueue() {
-        return queue;
+    public static ArrayList<Process> getReadyQueue() {
+        return readyQueue;
+    }
+
+    public static ArrayList<Process> getWaitingQueue() {
+        return waitingQueue;
     }
 }
