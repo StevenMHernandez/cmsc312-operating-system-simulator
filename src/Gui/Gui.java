@@ -3,8 +3,12 @@ package Gui;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import Components.*;
+import Components.CPU;
+import Components.Clock;
+import Components.InterruptProcessor;
 import Components.Process;
+import Components.ProcessState;
+import Components.Scheduler;
 import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,8 +40,6 @@ public class Gui extends Application {
     private final ObservableList<Process> processList = FXCollections.observableArrayList();
     private Scheduler scheduler;
     private CPU cpu;
-    private IOScheduler ioScheduler;
-    private  IOBurst ioBurst;
     private InterruptProcessor interruptProcessor;
     private boolean exeContinuously = true;
     private int exeSteps = -1;
@@ -63,7 +65,7 @@ public class Gui extends Application {
         TableColumn statusCol = new TableColumn("Status");
         statusCol.setCellValueFactory(new PropertyValueFactory<Process, String>("status"));
 
-        this.processList.setAll(Scheduler.getReadyQueue().stream().collect(Collectors.toList()));
+        this.processList.setAll(Scheduler.getQueue().stream().collect(Collectors.toList()));
 
         table = new TableView();
 
@@ -100,8 +102,6 @@ public class Gui extends Application {
     public void startup() throws InterruptedException {
         scheduler = new Scheduler();
         cpu = new CPU();
-        ioScheduler = new IOScheduler();
-        ioBurst = new IOBurst();
         interruptProcessor = new InterruptProcessor();
 
         // TODO: remove this test process
@@ -114,11 +114,11 @@ public class Gui extends Application {
         commands.add("CALCULATE");
         commands.add("33");
 
-        scheduler.insertReadyPCB(new Process(commands, 128));
-        scheduler.insertReadyPCB(new Process(commands, 196));
+        scheduler.insertPCB(new Process(commands, 128));
+        scheduler.insertPCB(new Process(commands, 196));
 
 
-        this.processList.setAll(Scheduler.getReadyQueue().stream().collect(Collectors.toList()));
+        this.processList.setAll(Scheduler.getQueue().stream().collect(Collectors.toList()));
 
         final long[] prevTime = {0};
 
@@ -179,7 +179,6 @@ public class Gui extends Application {
                 // check if the command needs us to do anything specific
                 switch (nextCommand) {
                     case "IO":
-                        ioScheduler.scheduleIO(scheduler, cpu.getCurrentPCB());
                         cpu.setState(scheduler, ProcessState.WAIT);
 
                         // RequestRandomIO(currentProcess)
@@ -203,6 +202,6 @@ public class Gui extends Application {
         CPU.advanceClock();
 
         // GUI
-        this.processList.setAll(Scheduler.getReadyQueue().stream().collect(Collectors.toList()));
+        this.processList.setAll(Scheduler.getQueue().stream().collect(Collectors.toList()));
     }
 }
