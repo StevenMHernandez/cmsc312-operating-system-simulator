@@ -1,8 +1,16 @@
 package Components;
 
+import java.util.Random;
+
 public class IOBurst {
 
-    public int generateIOBurst(int remaining) {
-        return remaining --;
+    Random random = new Random();
+
+    public int generateIOBurst() {
+        //return ((random.nextInt(25) + 1) + 25);  // 25-50 cycles
+
+
+        //for testing
+        return  ((random.nextInt(5) + 1) + 5); // 1-10
     }
 }

@@ -4,15 +4,14 @@ import java.util.ArrayList;
 
 public class Scheduler {
 
-    private static ArrayList<Process> queue = new ArrayList<>();
+    private static ExecutionQueue queue = new ExecutionQueue();
+    private CPU cpu = new CPU();
+
+    private static int maxQuantum = 2;
+    private int currentQuantum = 0;
 
     public Process getNextPCB() {
-        for (Process process : queue) {
-            if (process.getState() == ProcessState.READY || process.getState() == ProcessState.NEW) {
-                removePCB(process);
-                return process;
-            }
-        }
+        queue.dequeueReady();
 
         return null;
     }
@@ -20,13 +19,14 @@ public class Scheduler {
     public void insertPCB(Process process) {
         setArrival(process);
 
-        queue.add(process);
+        queue.enqueueReady(process);
     }
 
     public void removePCB(Process process) {
-        queue.remove(process);
+        queue.removeProcess(process);
     }
 
+    /*
     public ProcessState getState(Process process) {
         return process.getState();
     }
@@ -41,6 +41,20 @@ public class Scheduler {
 
         process.setState(stateIn);
     }
+    */
+
+    public void execute() {
+        cpu.setCurrentPCB(queue.dequeueReady());
+        Process current = cpu.execute();
+        currentQuantum++;
+        if (current != null)
+            if (currentQuantum < maxQuantum)
+                queue.replaceReady(current);
+            else
+                queue.enqueueReady(current);
+        else
+            queue.getNextReady();
+    }
 
     public int getWait(Process process) {
         return process.getWait();
@@ -54,7 +68,11 @@ public class Scheduler {
         process.setArrival(Clock.getClock());
     }
 
-    public static ArrayList<Process> getQueue() {
-        return queue;
+    public static ArrayList<Process> getReadyQueue() {
+        return queue.getReadyQueue();
+    }
+
+    public static ArrayList<Process> getWaitingQueue() {
+        return queue.getWaitingQueue();
     }
 }

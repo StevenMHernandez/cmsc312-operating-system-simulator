@@ -3,23 +3,15 @@ package Components;
 public class IOScheduler {
 	private Process waitingProcess;
     int remainingIO;
-    IOBurst ioBurst;
+    IOBurst ioBurst = new IOBurst();
     Scheduler scheduler;
 
-    public void scheduleIO(Scheduler schedulerIn,Process process){
-    	waitingProcess = process;
-        remainingIO = 5;
-        ioBurst = new IOBurst();
-        scheduler = schedulerIn;
+    public void scheduleIO(){
+        
     }
-    
-    public void startIO() {
-    	ioBurst.generateIOBurst(remainingIO);
-        if (remainingIO < 1) {
-            waitingProcess.setState(ProcessState.READY);
-            scheduler.insertReadyPCB(waitingProcess);
 
-        }
+    public void startIO() {
+
     }
 
 }

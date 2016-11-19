@@ -1,11 +1,10 @@
 package Components;
 
+import java.util.ArrayList;
+
 public class CPU {
 
     private Process currentProcess;
-
-    private int currentProcessTime = 0;
-    public static int MAX_CPU_TIME = 10;
 
     public static int advanceClock() {
         InterruptProcessor.interrupted = false;
@@ -19,32 +18,44 @@ public class CPU {
 
     public void setCurrentPCB(Process process) { currentProcess = process; }
 
-    public ProcessState getState(Process process) {
-        return process.getState();
-    }
-
-    public void setState(Scheduler scheduler, ProcessState stateIn) {
-        if (stateIn == ProcessState.WAIT) {
-            //move process back into scheduler
-            currentProcess.setState(ProcessState.READY);
-            scheduler.insertPCB(currentProcess);
-            this.currentProcess = null;
-        } else if (stateIn == ProcessState.EXIT) {
-            currentProcess.setState(stateIn);
-            this.currentProcess = null;
-        } else {
-            currentProcess.setState(stateIn);
+    //round robin
+    //run 1 command from process in ready queue, then put it back at the end of the queue
+    public Process execute() {
+        String command = currentProcess.getQueue().remove(0);
+        switch (command) {
+            case "CALCULATE":
+            case "OUT":
+                break;
+            case "IO":
+                //process IO
+                //currentProcess.setState(ProcessState.WAIT);
+                break;
+            default:
+                break;
         }
+        if (currentProcess.getQueue().size() > 0)
+            return currentProcess;
+        else
+            return null;
     }
 
-    public int getCPUTime(Process process) {
-        return currentProcessTime;
-    }
-
-    public void addCPUTime(int time) {
-        currentProcessTime += time;
-    }
-
+//    public ProcessState getState(Process process) {
+//        return process.getState();
+//    }
+//
+//    public void setState(Scheduler scheduler, ProcessState stateIn) {
+//        if (stateIn == ProcessState.WAIT) {
+//            //move process back into scheduler
+//            currentProcess.setState(ProcessState.READY);
+//            scheduler.insertPCB(currentProcess);
+//            this.currentProcess = null;
+//        } else if (stateIn == ProcessState.EXIT) {
+//            currentProcess.setState(stateIn);
+//            this.currentProcess = null;
+//        } else {
+//            currentProcess.setState(stateIn);
+//        }
+//    }
 
     public static boolean detectInterrupt() {
         return InterruptProcessor.interrupted;
