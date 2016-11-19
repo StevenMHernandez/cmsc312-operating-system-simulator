@@ -4,15 +4,18 @@ import java.util.ArrayList;
 
 public class Process {
     private ProcessState state;
-    
+
     private int arrival;
 
     private ArrayList<String> queue;
 
     public String name = "Process Name";
 
-    public Process(ArrayList<String> queue) {
+    private int size;
+
+    public Process(ArrayList<String> queue, int size) {
         this.queue = queue;
+        this.size = size;
         this.state = ProcessState.NEW;
     }
 
@@ -35,16 +38,24 @@ public class Process {
     public void setState(ProcessState state) {
         this.state = state;
     }
-    
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
     public int getArrival() {
-    	return arrival;
+        return arrival;
     }
-    
+
     public void setArrival(int arrivalIn) {
-    	this.arrival = arrivalIn;
+        this.arrival = arrivalIn;
     }
-    
+
     public int getWait() {
-    	return Clock.getClock() - arrival;
+        return Clock.getClock() - arrival;
     }
 }
