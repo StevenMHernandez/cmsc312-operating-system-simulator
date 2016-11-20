@@ -7,7 +7,7 @@ public class Scheduler {
     private static ExecutionQueue queue = new ExecutionQueue();
     private CPU cpu = new CPU();
 
-    private static int maxQuantum = 2;
+    private static int maxQuantum = 3;
     private int currentQuantum = 0;
 
     public Process getNextPCB() {
@@ -48,12 +48,23 @@ public class Scheduler {
         Process current = cpu.execute();
         currentQuantum++;
         if (current != null)
-            if (currentQuantum < maxQuantum)
-                queue.replaceReady(current);
-            else
-                queue.enqueueReady(current);
-        else
+            if (current.getState() == ProcessState.WAIT) {
+                queue.enqueueIO(current);
+                currentQuantum = 0;
+            }
+            else  {
+                if (currentQuantum < maxQuantum) {
+                    queue.replaceReady(current);
+                }
+                else {
+                    queue.enqueueReady(current);
+                    currentQuantum = 0;
+                }
+            }
+        else {
             queue.getNextReady();
+            currentQuantum = 0;
+        }
     }
 
     public int getWait(Process process) {
@@ -74,5 +85,9 @@ public class Scheduler {
 
     public static ArrayList<Process> getWaitingQueue() {
         return queue.getWaitingQueue();
+    }
+
+    public static ArrayList<Process> getIoQueue() {
+        return queue.getIoQueue();
     }
 }

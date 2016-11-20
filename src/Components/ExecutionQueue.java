@@ -6,6 +6,7 @@ public class ExecutionQueue {
     private int freeMemory = 256;
     private ArrayList<Process> readyQueue = new ArrayList<>();
     private ArrayList<Process> waitingQueue = new ArrayList<>();
+    private ArrayList<Process> ioQueue = new ArrayList<>();
 
 
     public void enqueueReady(Process process) {
@@ -17,12 +18,22 @@ public class ExecutionQueue {
         }
     }
 
+    public void getNextReady() {
+        for (Process process : waitingQueue) {
+            enqueueReady(process);
+        }
+    }
+
     public void replaceReady(Process process) {
         readyQueue.add(0, process);
     }
 
     public void enqueueWaiting(Process process) {
         waitingQueue.add(process);
+    }
+
+    public void enqueueIO(Process process) {
+        ioQueue.add(process);
     }
 
     public Process dequeueReady() {
@@ -59,9 +70,9 @@ public class ExecutionQueue {
         return waitingQueue;
     }
 
-    public void getNextReady() {
-        for (Process process : waitingQueue) {
-            enqueueReady(process);
-        }
+    public ArrayList<Process> getIoQueue() {
+        return ioQueue;
     }
+
+
 }

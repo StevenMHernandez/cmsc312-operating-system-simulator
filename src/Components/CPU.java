@@ -18,8 +18,6 @@ public class CPU {
 
     public void setCurrentPCB(Process process) { currentProcess = process; }
 
-    //round robin
-    //run 1 command from process in ready queue, then put it back at the end of the queue
     public Process execute() {
         String command = currentProcess.getQueue().remove(0);
         switch (command) {
@@ -28,8 +26,8 @@ public class CPU {
                 break;
             case "IO":
                 //process IO
-                //currentProcess.setState(ProcessState.WAIT);
-                break;
+                currentProcess.setState(ProcessState.WAIT);
+                return currentProcess;
             default:
                 break;
         }
