@@ -3,6 +3,8 @@ package Components;
 import java.util.ArrayList;
 
 public class ExecutionQueue {
+
+
     private int freeMemory = 256;
     private ArrayList<Process> readyQueue = new ArrayList<>();
     private ArrayList<Process> waitingQueue = new ArrayList<>();
@@ -19,12 +21,20 @@ public class ExecutionQueue {
     }
 
     public void getNextReady() {
-        for (Process process : waitingQueue) {
-            enqueueReady(process);
+        Process nextProcess;
+        for (int i = 0; i < waitingQueue.size(); i++) {
+            nextProcess = dequeueWaiting();
+            if (nextProcess.getSize() < freeMemory) {
+                enqueueReady(nextProcess);
+            } else {
+                enqueueWaiting(nextProcess);
+            }
+
         }
     }
 
     public void replaceReady(Process process) {
+        freeMemory -= process.getSize();
         readyQueue.add(0, process);
     }
 
@@ -74,5 +84,7 @@ public class ExecutionQueue {
         return ioQueue;
     }
 
-
+    public int getFreeMemory() {
+        return freeMemory;
+    }
 }

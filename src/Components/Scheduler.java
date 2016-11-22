@@ -18,7 +18,7 @@ public class Scheduler {
 
     public void insertPCB(Process process) {
         setArrival(process);
-
+        process.setState(ProcessState.READY);
         queue.enqueueReady(process);
     }
 
@@ -44,27 +44,33 @@ public class Scheduler {
     */
 
     public void execute() {
-        cpu.setCurrentPCB(queue.dequeueReady());
-        Process current = cpu.execute();
-        currentQuantum++;
-        if (current != null)
-            if (current.getState() == ProcessState.WAIT) {
-                queue.enqueueIO(current);
+        if (getReadyQueue().size() > 0 ) {
+            cpu.setCurrentPCB(queue.dequeueReady());
+            Process current = cpu.execute();
+            currentQuantum++;
+            if (current != null)
+                if (current.getState() == ProcessState.WAIT) {
+                    queue.enqueueIO(current);
+                    currentQuantum = 0;
+                } else {
+                    if (currentQuantum < maxQuantum) {
+                        queue.replaceReady(current);
+                    } else {
+                        queue.enqueueReady(current);
+                        currentQuantum = 0;
+                    }
+                }
+            else {
+                queue.getNextReady();
                 currentQuantum = 0;
             }
-            else  {
-                if (currentQuantum < maxQuantum) {
-                    queue.replaceReady(current);
-                }
-                else {
-                    queue.enqueueReady(current);
-                    currentQuantum = 0;
-                }
+
+            if (queue.getFreeMemory() > 0) {
+                queue.getNextReady();
             }
-        else {
-            queue.getNextReady();
-            currentQuantum = 0;
         }
+
+        cpu.advanceClock();
     }
 
     public int getWait(Process process) {
