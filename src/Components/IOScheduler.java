@@ -1,33 +1,14 @@
 package Components;
 
-import java.util.ArrayList;
-
 public class IOScheduler {
-	private Process currentProcess;
-    int remainingIO;
-    IOBurst ioBurst = new IOBurst();
-    ArrayList<Process> ioQueue;
+    private static IOBurst ioBurst = new IOBurst();
 
-    public IOScheduler (ArrayList<Process> ioQueue) {
-        this.ioQueue = ioQueue;
+    public static void scheduleIO(Process process){
+        Event event = new Event(process, ioBurst.generateIOBurst(), "IO");
+        EventQueue.enQueue(event);
     }
 
-    public void scheduleIO(Process process){
-        ioQueue.add(process);
+    public static void startIO() {
+        // TODO
     }
-
-    public void startIO() {
-        currentProcess = ioQueue.remove(0);
-        remainingIO = ioBurst.generateIOBurst();
-    }
-
-    public void processIO(Scheduler scheduler) {
-        remainingIO--;
-        if (remainingIO == 0) {
-            currentProcess.setState(ProcessState.READY);
-            scheduler.insertPCB(currentProcess);
-            currentProcess = null;
-        }
-    }
-
 }

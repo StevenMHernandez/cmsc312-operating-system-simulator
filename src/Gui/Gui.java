@@ -5,6 +5,9 @@ import java.util.stream.Collectors;
 
 import Components.CPU;
 import Components.Clock;
+import Components.Event;
+import Components.EventQueue;
+import Components.IOScheduler;
 import Components.InterruptProcessor;
 import Components.Process;
 import Components.ProcessState;
@@ -148,6 +151,19 @@ public class Gui extends Application {
             exeSteps--;
         }
 
+        // check for events
+        if (cpu.detectPreemption()) {
+            Event event = EventQueue.deQueue();
+
+            switch(event.type) {
+                case "IO":
+                    cpu.setCurrentPCB(event.process);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         if (null == cpu.getCurrentPCB()) {
             cpu.setCurrentPCB(scheduler.getNextPCB());
         }
@@ -181,7 +197,7 @@ public class Gui extends Application {
                     case "IO":
                         cpu.setState(scheduler, ProcessState.WAIT);
 
-                        // RequestRandomIO(currentProcess)
+                        IOScheduler.scheduleIO(currentProcess);
 
                         interruptProcessor.signalInterrupt();
                     default:

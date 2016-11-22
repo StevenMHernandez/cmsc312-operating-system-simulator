@@ -2,13 +2,17 @@ package Components;
 import java.util.PriorityQueue;
 
 public class EventQueue {
-	private PriorityQueue<Event> queue = new PriorityQueue<>();
+    private static PriorityQueue<Event> queue = new PriorityQueue<>(10, (a, b) -> a.time - b.time);
 	
-    public void enQueue(Event event) {
+    public static void enQueue(Event event) {
     	queue.add(event);
     }
 
-    Event deQueue() {
+    public static Event peek() {
+        return queue.peek();
+    }
+
+    public static Event deQueue() {
         return queue.poll();
     }
 }

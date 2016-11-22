@@ -8,7 +8,7 @@ public class Scheduler {
     private CPU cpu = new CPU();
 
     private static int maxQuantum = 3;
-    private int currentQuantum = 0;
+    private static int currentQuantum = 0;
 
     public Process getNextPCB() {
         queue.dequeueReady();
@@ -89,5 +89,9 @@ public class Scheduler {
 
     public static ArrayList<Process> getIoQueue() {
         return queue.getIoQueue();
+    }
+
+    public static void resetQuantum() {
+        currentQuantum = 0;
     }
 }

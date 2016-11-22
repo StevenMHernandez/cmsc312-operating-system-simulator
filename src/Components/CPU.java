@@ -1,7 +1,5 @@
 package Components;
 
-import java.util.ArrayList;
-
 public class CPU {
 
     private Process currentProcess;
@@ -16,7 +14,14 @@ public class CPU {
         return currentProcess;
     }
 
-    public void setCurrentPCB(Process process) { currentProcess = process; }
+    public void setCurrentPCB(Process process) {
+        if (this.currentProcess != null) {
+            this.currentProcess.setState(ProcessState.WAIT);
+        }
+        this.currentProcess = process;
+        this.currentProcess.setState(ProcessState.RUN);
+        Scheduler.resetQuantum();
+    }
 
     public Process execute() {
         String command = currentProcess.getQueue().remove(0);
@@ -59,8 +64,7 @@ public class CPU {
         return InterruptProcessor.interrupted;
     }
 
-    public static boolean detectPreemption() {
-        // TODO
-        return false;
+    public boolean detectPreemption() {
+        return EventQueue.peek().time < Clock.getClock();
     }
 }
