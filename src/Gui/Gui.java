@@ -3,23 +3,18 @@ package Gui;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import Components.CPU;
-import Components.InterruptProcessor;
+import Components.*;
 import Components.Process;
-import Components.Scheduler;
 import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.control.TextField;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -32,6 +27,7 @@ public class Gui extends Application {
     BorderPane layout;
     HBox lowerBox;
     TextField textInput;
+    TextArea textArea;
     Button button;
     TableView readyTable;
     TableView waitingTable;
@@ -82,7 +78,12 @@ public class Gui extends Application {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.ENTER) {
-                    System.out.println(textInput.getText());
+                    CommandInterface CI = new CommandInterface();
+                    boolean fine = CI.temporaryName(textInput.getText());
+                    textInput.clear();
+                    if(!fine) {
+                        displayBox.display("Error", "Invalid Command!");
+                    }
                 }
             }
         });

@@ -2,20 +2,23 @@ package Components;
 
 public class Memory {
 
-    private final int totalMemory;
-    private int usedMemory = 0;
+    private static int totalMemory;
+    private static int usedMemory = 0;
 
     public Memory(int memory) {
         totalMemory = memory;
     }
 
+    /*
     public Memory() {
 
     }
 
+
     public void setTotalMemory(int value) {
         totalMemory = value;
     }
+    */
 
     public int addUsedMemory(int value) {
         usedMemory = usedMemory + value;

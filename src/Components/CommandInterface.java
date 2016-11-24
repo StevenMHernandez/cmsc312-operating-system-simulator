@@ -3,32 +3,42 @@ package Components;
 import Parsing.parseText;
 
 public class CommandInterface {
-  
-  parseText pt = new parseText();
-  
-  public void temporaryname(String input) {
-    //add check for valid command or in gui. use displayBox to display error
-    pt.parseLine(input);
-    if(pt.value == null)
-      chooseCommand(pt.command);
-    else
-      chooseCommand(pt.command, pt.value);
-  }
-  
-    private void chooseCommand(String command) {
-      switch(command) {
-        case "proc": proc(); break;
-        case "mem": mem(); break;
-        case "exe": exe(); break;
-        case "reset": reset(); break;
-        case "exit": exit(); break;
-        default: break;
-      }
+
+    //static class
+
+    private static final parseText pt = new parseText();
+
+    public boolean temporaryName(String input) {
+        //add check for valid command or in gui. use displayBox to display error
+        pt.parseLine(input);
+        boolean valid = valid();
+        if (valid) {
+            if (pt.getValue() == null)
+                chooseCommand(pt.getCommand());
+            else
+                chooseCommand(pt.getCommand(), pt.getValue());
+        }
+        return valid;
     }
-    
+
+    private boolean valid() {
+        return true;
+    }
+
+    private void chooseCommand(String command) {
+        switch(command) {
+            case "proc": proc(); break;
+            case "mem": mem(); break;
+            case "exe": exe(); break;
+            case "reset": reset(); break;
+            case "exit": exit(); break;
+            default: break;
+        }
+    }
+
     private void chooseCommand(String command, String value) {
-      if(command == "load") //use .equalsTo?
-        load(value);
+        if(command.equals("load"))
+            load(value);
     }
 
     private void proc() {
@@ -40,9 +50,9 @@ public class CommandInterface {
     }
 
     private void load(String job) {
-      pt.parseFile(job);
-      //change parsetext datatype to arraylist to match with process class
-      
+        pt.parseFile(job);
+        //change parsetext datatype to arraylist to match with process class
+
     }
 
     private void exe() {
@@ -52,9 +62,9 @@ public class CommandInterface {
     private void reset() {
 
     }
-    
+
     private void exit() {
-      
+
     }
 
     public void promptUser(){

@@ -3,8 +3,10 @@ package Components;
 import java.util.ArrayList;
 
 public class Process {
+
     private ProcessState state;
 
+    private int calculate = 0;
     private int arrival;
 
     private ArrayList<String> queue;
@@ -17,6 +19,18 @@ public class Process {
         this.queue = queue;
         this.size = size;
         this.state = ProcessState.NEW;
+    }
+
+    public int getCalculate() {
+        return calculate;
+    }
+
+    public void setCalculate(int value) {
+        calculate = value;
+    }
+
+    public void decrementCalculate() {
+        calculate--;
     }
 
     public String getName() {
