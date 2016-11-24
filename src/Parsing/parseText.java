@@ -24,7 +24,7 @@ public class parseText {
     public void parseLine(String command) {
         command.toLowerCase();
         input = new Scanner(command);
-        command = input.next();
+        this.command = input.next();
         value = null;
         if(input.hasNext())
             value = input.next();
