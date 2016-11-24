@@ -34,7 +34,7 @@ public class parseText {
     private void parse() {
         try {
             input = new Scanner(file);
-            while( input.hasNext()) {
+            while(input.hasNext()) {
                 queue.add(input.next());
             }
         } catch (Exception e) { System.out.println("uh what do i put here"); }

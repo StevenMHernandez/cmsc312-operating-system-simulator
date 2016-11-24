@@ -13,6 +13,7 @@ public class CommandInterface {
         pt.parseLine(input);
         boolean valid = valid();
         if (valid) {
+
             if (pt.getValue() == null)
                 chooseCommand(pt.getCommand());
             else
@@ -21,8 +22,12 @@ public class CommandInterface {
         return valid;
     }
 
-    private boolean valid() {
-        return true;
+    private boolean valid() { //getting errors when trying to compare
+        String testing = pt.getCommand();
+        if(testing.equals("proc"))
+            return true;
+        //add integer check for pt.getValue()
+        return false;
     }
 
     private void chooseCommand(String command) {
