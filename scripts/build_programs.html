@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Build Program Files</title>
+</head>
+<body>
+
+<h1>Build random program files. </h1>
+
+<p>
+    Simply input a filename (ex. web_browser, calculator etc) then click generate. Save the text
+    that is generated into a file in our <code>programs/</code> directory
+</p>
+
+<hr>
+
+<label>
+    File name:
+    <br>
+    <input id="filename" type="text">
+</label>
+
+<button id="generate">Generate</button>
+
+<hr>
+
+<textarea id="textarea" cols="30" rows="10"></textarea>
+
+<script>
+    var filename = document.getElementById('filename');
+
+    document.getElementById('generate').onclick = function () {
+        var size = Math.floor(Math.random() * 500);
+        var memorySize = Math.floor(Math.random() * 256);
+        var program = newProgram(size);
+
+        document.getElementById('textarea').value = memorySize + "\n" + program + "\nEXE " + filename.value;
+    };
+
+    var operations = [
+        'CALCULATE %INT%',
+        'IO',
+        'YIELD',
+        'OUT %STRING%'
+    ];
+
+    var randomOutput = [
+        'hello',
+        'world',
+        'testing',
+        'GOGOGO',
+        'debug message'
+    ];
+
+    function newProgram(size) {
+        var program = [];
+
+        for (var i = 0; i < size; i++) {
+            program.push(getRandomOperation());
+        }
+
+        return program.join("\n");
+    }
+
+    function getRandomOperation() {
+        var op = operations[Math.floor(Math.random() * operations.length)];
+        op = op.replace('%INT%', String(Math.floor(Math.random() * 100)))
+                .replace('%STRING%', '"' + getRandomOutput() + '"');
+        return op;
+    }
+
+    function getRandomOutput() {
+        return randomOutput[Math.floor(Math.random() * randomOutput.length)];
+    }
+</script>
+</body>
+</html>

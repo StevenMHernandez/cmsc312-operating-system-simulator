@@ -14,3 +14,7 @@ Implementation of an operating system simulator
 * create GUI for monitoring and testing the system
 * implement a series of operating system commands
 * create a log with details of executed operations
+
+## Program File Generation
+
+To generate some more random program files, simply open up `scripts/build_programs.html` in a web browser.
