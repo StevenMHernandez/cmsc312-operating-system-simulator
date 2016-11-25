@@ -34,20 +34,28 @@ public class Gui extends Application {
 
     private final ObservableList<Process> readyProcessList = FXCollections.observableArrayList();
     private final ObservableList<Process> waitingProcessList = FXCollections.observableArrayList();
-    private Scheduler scheduler;
-    private CPU cpu;
+    protected static Scheduler scheduler;
     private InterruptProcessor interruptProcessor;
     private boolean exeContinuously = true;
     private int exeSteps = -1;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         window = primaryStage;
         window.setTitle("Simulator");
 
         button = new Button();
         button.setText("test");
-        button.setOnAction(e -> displayBox.display("displaybox", "hi does this work"));
+        button.setOnAction(e -> {
+            boolean valid = false;
+            if(!textInput.getText().trim().equals(""))
+                valid = CommandInterface.temporaryName(textInput.getText());
+            textInput.clear();
+            if(!valid) {
+                displayBox.display("Error", "Invalid Command!");
+            }
+        });
 
         TableView<Process> processTable = new TableView<>();
         ObservableList<Process> processList = FXCollections.observableArrayList();
@@ -78,12 +86,7 @@ public class Gui extends Application {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.ENTER) {
-                    CommandInterface CI = new CommandInterface();
-                    boolean fine = CI.temporaryName(textInput.getText());
-                    textInput.clear();
-                    if(!fine) {
-                        displayBox.display("Error", "Invalid Command!");
-                    }
+                    button.fire();
                 }
             }
         });
@@ -107,7 +110,6 @@ public class Gui extends Application {
 
     public void startup() throws InterruptedException {
         scheduler = new Scheduler();
-        cpu = new CPU();
         interruptProcessor = new InterruptProcessor();
 
         // TODO: remove this test process
@@ -120,12 +122,15 @@ public class Gui extends Application {
         commands.add("CALCULATE");
         commands.add("33");
 
+        /*
         scheduler.insertPCB(new Process(commands, 128));
         scheduler.insertPCB(new Process(commands, 96));
         scheduler.insertPCB(new Process(commands, 24));
         scheduler.insertPCB(new Process(commands, 64));
         scheduler.insertPCB(new Process(commands, 128));
         scheduler.insertPCB(new Process(commands, 32));
+        */
+
 
 
         this.readyProcessList.setAll(Scheduler.getReadyQueue().stream().collect(Collectors.toList()));

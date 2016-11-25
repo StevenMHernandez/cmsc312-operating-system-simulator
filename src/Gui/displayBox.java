@@ -1,5 +1,8 @@
 package Gui;
 
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.geometry.*;
@@ -27,6 +30,13 @@ public class displayBox {
         layout.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(layout);
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE || event.getCode() == KeyCode.ENTER) {
+                    close.fire();
+                }
+            }
+        });
         window.setScene(scene);
         window.showAndWait();
     }

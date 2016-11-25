@@ -1,15 +1,14 @@
 package Components;
 
+import Gui.Gui;
 import Parsing.parseText;
 
-public class CommandInterface {
+public class CommandInterface extends Gui{
 
-    //static class
 
     private static final parseText pt = new parseText();
 
-    public boolean temporaryName(String input) {
-        //add check for valid command or in gui. use displayBox to display error
+    public static boolean temporaryName(String input) {
         pt.parseLine(input);
         boolean valid = valid();
         if (valid) {
@@ -22,15 +21,23 @@ public class CommandInterface {
         return valid;
     }
 
-    private boolean valid() { //getting errors when trying to compare
-        String testing = pt.getCommand();
-        if(testing.equals("proc"))
+    private static boolean valid() {
+        if(pt.getCommand().equals("proc"))
             return true;
-        //add integer check for pt.getValue()
+        if(pt.getCommand().equals("mem"))
+            return true;
+        if(pt.getCommand().equals("exe"))
+            return true;
+        if(pt.getCommand().equals("reset"))
+            return true;
+        if(pt.getCommand().equals("exit"))
+            return true;
+        if(pt.getCommand().equals("load")) if(pt.getValue() != null)
+            return true;
         return false;
     }
 
-    private void chooseCommand(String command) {
+    private static void chooseCommand(String command) {
         switch(command) {
             case "proc": proc(); break;
             case "mem": mem(); break;
@@ -41,34 +48,36 @@ public class CommandInterface {
         }
     }
 
-    private void chooseCommand(String command, String value) {
+    private static void chooseCommand(String command, String value) {
         if(command.equals("load"))
             load(value);
     }
 
-    private void proc() {
+    private static void proc() {
 
     }
 
-    private void mem() {
+    private static void mem() {
 
     }
 
-    private void load(String job) {
+    private static void load(String job) {
         pt.parseFile(job);
-        //change parsetext datatype to arraylist to match with process class
-
+        if(!pt.getQueue().isEmpty()) {
+            int size = Integer.valueOf(pt.getQueue().remove(0));
+            scheduler.insertPCB(new Process(pt.getQueue(), size));
+        }
     }
 
-    private void exe() {
+    private static void exe() {
         // scheduler.insertPCB()
     }
 
-    private void reset() {
-
+    private static void reset() {
+        Scheduler.resetQuantum();
     }
 
-    private void exit() {
+    private static void exit() {
 
     }
 

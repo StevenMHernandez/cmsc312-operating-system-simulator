@@ -70,7 +70,7 @@ public class Scheduler {
             }
         }
 
-        cpu.advanceClock();
+        CPU.advanceClock();
     }
 
     public int getWait(Process process) {

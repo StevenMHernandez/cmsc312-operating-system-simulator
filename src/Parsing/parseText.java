@@ -5,12 +5,10 @@ import java.io.*;
 
 public class parseText {
 
-    private String inputfile = "input.txt";
+    private String inputfile;
     private String command, value;
-    private LinkedList<String> queue = new LinkedList<String>();
-    private File file = new File(inputfile);
+    private ArrayList<String> queue = new ArrayList<>();
     private Scanner input;
-
 
     public parseText() {
 
@@ -18,11 +16,11 @@ public class parseText {
 
     public void parseFile(String filename) {
         this.inputfile = filename;
-        parse();
+        parseFile();
     }
 
     public void parseLine(String command) {
-        command.toLowerCase();
+        command = command.toLowerCase();
         input = new Scanner(command);
         this.command = input.next();
         value = null;
@@ -31,17 +29,19 @@ public class parseText {
         input.close();
     }
 
-    private void parse() {
+    private void parseFile() {
+        queue.clear();
         try {
+            File file = new File(inputfile);
             input = new Scanner(file);
             while(input.hasNext()) {
                 queue.add(input.next());
             }
-        } catch (Exception e) { System.out.println("uh what do i put here"); }
+        } catch (Exception e) { System.out.println("File not found"); }
         input.close();
     }
 
-    public LinkedList<String> getStuff() {
+    public ArrayList<String> getQueue() {
         return queue;
     }
 
@@ -51,12 +51,5 @@ public class parseText {
 
     public String getValue() {
         return value;
-    }
-
-    public void testprint() {
-
-        while(queue.peek() != null) {
-            System.out.println(queue.poll());
-        }
     }
 }
