@@ -33,12 +33,18 @@ public class CPU {
                     currentProcess.setCalculate(Integer.valueOf(currentProcess.getQueue().remove(0)));
                     return currentProcess;
                 case "OUT":
-                    //display to textarea
+                    String out = currentProcess.getQueue().remove(0).substring(1);
+                    while (!out.substring(out.length()-1).equals("\"")) {
+                        out = out + " " + currentProcess.getQueue().remove(0);
+                    }
+                    out = out.substring(0, out.length()-1);
+                    System.out.println(out); //display to textarea
                     break;
                 case "YIELD":
                     break;
                 case "IO":
                     //process IO
+                    currentProcess.incrementIoRequested();
                     currentProcess.setState(ProcessState.WAIT);
                     return currentProcess;
                 default:
