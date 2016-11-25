@@ -13,6 +13,7 @@ public class ExecutionQueue {
 
     public void enqueueReady(Process process) {
         if (process.getSize() < freeMemory) {
+            process.setState(ProcessState.READY);
             readyQueue.add(process);
             freeMemory -= process.getSize();
         } else {
@@ -29,7 +30,6 @@ public class ExecutionQueue {
             } else {
                 enqueueWaiting(nextProcess);
             }
-
         }
     }
 
@@ -47,6 +47,10 @@ public class ExecutionQueue {
     }
 
     public Process dequeueReady() {
+        if (this.readyQueue.size() == 0) {
+            return null;
+        }
+
         Process returnProcess = readyQueue.remove(0);
         freeMemory += returnProcess.getSize();
 
@@ -86,5 +90,28 @@ public class ExecutionQueue {
 
     public int getFreeMemory() {
         return freeMemory;
+    }
+
+    public void updateQueues() {
+        // remove old processes
+        ArrayList<Process> processToRemove = new ArrayList();
+        for (Process p : this.readyQueue) {
+            if (p.getStatus().equals(ProcessState.EXIT)) {
+                processToRemove.add(p);
+            }
+        }
+
+        for (Process p : processToRemove) {
+            this.readyQueue.remove(p);
+        }
+
+        // add waiting processes
+        if (this.freeMemory > 0 && this.waitingQueue.size() > 0) {
+            Process p = this.waitingQueue.get(0);
+            if (p.getSize() < this.freeMemory) {
+                this.enqueueReady(p);
+                this.waitingQueue.remove(p);
+            }
+        }
     }
 }

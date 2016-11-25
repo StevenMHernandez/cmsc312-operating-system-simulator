@@ -3,8 +3,12 @@ package Gui;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import Components.*;
+import Components.Clock;
+import Components.CommandInterface;
+import Components.InterruptProcessor;
+import Components.OS;
 import Components.Process;
+import Components.Scheduler;
 import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,9 +43,10 @@ public class Gui extends Application {
     private boolean exeContinuously = true;
     private int exeSteps = -1;
 
+    OS os = new OS();
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-
         window = primaryStage;
         window.setTitle("Simulator");
 
@@ -68,8 +73,15 @@ public class Gui extends Application {
         TableColumn statusCol = new TableColumn("Status");
         statusCol.setCellValueFactory(new PropertyValueFactory<Process, String>("status"));
 
+        TableColumn nameCol2 = new TableColumn("Process");
+        nameCol2.setCellValueFactory(new PropertyValueFactory<Process, String>("name"));
+        TableColumn arrivalCol2 = new TableColumn("Arrival Time");
+        arrivalCol2.setCellValueFactory(new PropertyValueFactory<Process, String>("arrival"));
+        TableColumn statusCol2 = new TableColumn("Status");
+        statusCol2.setCellValueFactory(new PropertyValueFactory<Process, String>("status"));
+
         this.readyProcessList.setAll(Scheduler.getReadyQueue().stream().collect(Collectors.toList()));
-        this.waitingProcessList.addAll(Scheduler.getWaitingQueue().stream().collect(Collectors.toList()));
+        this.waitingProcessList.setAll(Scheduler.getWaitingQueue().stream().collect(Collectors.toList()));
 
         readyTable = new TableView();
         waitingTable = new TableView();
@@ -77,7 +89,7 @@ public class Gui extends Application {
         readyTable.setItems(this.readyProcessList);
         readyTable.getColumns().addAll(nameCol, arrivalCol, statusCol);
         waitingTable.setItems(this.waitingProcessList);
-        waitingTable.getColumns().addAll(nameCol, arrivalCol, statusCol);
+        waitingTable.getColumns().addAll(nameCol2, arrivalCol2, statusCol2);
 
 
 
@@ -109,10 +121,7 @@ public class Gui extends Application {
     }
 
     public void startup() throws InterruptedException {
-        scheduler = new Scheduler();
-        interruptProcessor = new InterruptProcessor();
-
-        // TODO: remove this test process
+        // TODO: remove these test process
         ArrayList<String> commands = new ArrayList<String>();
         commands.add("CALCULATE");
         commands.add("33");
@@ -122,36 +131,29 @@ public class Gui extends Application {
         commands.add("CALCULATE");
         commands.add("33");
 
-        /*
-        scheduler.insertPCB(new Process(commands, 128));
-        scheduler.insertPCB(new Process(commands, 96));
-        scheduler.insertPCB(new Process(commands, 24));
-        scheduler.insertPCB(new Process(commands, 64));
-        scheduler.insertPCB(new Process(commands, 128));
-        scheduler.insertPCB(new Process(commands, 32));
-        */
-
+        Scheduler.insertPCB(new Process(commands, 128));
+        Scheduler.insertPCB(new Process(commands, 96));
+        Scheduler.insertPCB(new Process(commands, 24));
+        Scheduler.insertPCB(new Process(commands, 64));
+        Scheduler.insertPCB(new Process(commands, 128));
+        Scheduler.insertPCB(new Process(commands, 32));
 
 
         this.readyProcessList.setAll(Scheduler.getReadyQueue().stream().collect(Collectors.toList()));
-        this.waitingProcessList.addAll(Scheduler.getWaitingQueue().stream().collect(Collectors.toList()));
+        this.waitingProcessList.setAll(Scheduler.getWaitingQueue().stream().collect(Collectors.toList()));
 
         final long[] prevTime = {0};
 
-
         new AnimationTimer() {
             @Override public void handle(long currentNanoTime) {
-                if (currentNanoTime > prevTime[0] + 1000000000) {
-                    System.out.println(currentNanoTime);
-                    System.out.println(prevTime[0]);
-
+                if (currentNanoTime > prevTime[0] + 400000000) {
                     try {
                         loop();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 
-                    prevTime[0] = currentNanoTime + 1000000000;
+                    prevTime[0] = currentNanoTime + 400000000;
                 }
             }
         }.start();
@@ -164,77 +166,12 @@ public class Gui extends Application {
             exeSteps--;
         }
 
-        scheduler.execute();
+        os.execute();
 
-//        // check for events
-//        if (cpu.detectPreemption()) {
-//            Event event = EventQueue.deQueue();
-//
-//            switch(event.type) {
-//                case "IO":
-//                    cpu.setCurrentPCB(event.process);
-//                    break;
-//                default:
-//                    break;
-//            }
-//        }
-//
-//        if (null == cpu.getCurrentPCB()) {
-//            cpu.setCurrentPCB(scheduler.getNextPCB());
-//        }
-
-
-
-//        // there may not be any more readyProcessList from the scheduler
-//        if (null != cpu.getCurrentPCB()) {
-//            Process currentProcess = cpu.getCurrentPCB();
-//
-//            cpu.setState(scheduler, ProcessState.RUN);
-//
-//            if (currentProcess.getQueue().isEmpty()) {
-//                cpu.setState(scheduler, ProcessState.EXIT);
-//
-//                interruptProcessor.signalInterrupt();
-//            } else {
-//                // read next line from our process's queue. (dequeue)
-//                String nextCommand = currentProcess.getQueue().remove(0);
-//
-//                // check if the command has parameters we should read (remove from the queue)
-//                switch (nextCommand) {
-//                    case "CALCULATE":
-//                    case "OUT":
-//                        currentProcess.getQueue().remove(0);
-//                        break;
-//                    default:
-//                        break;
-//                }
-//
-//                // check if the command needs us to do anything specific
-//                switch (nextCommand) {
-//                    case "IO":
-//                        cpu.setState(scheduler, ProcessState.WAIT);
-//
-//                        IOScheduler.scheduleIO(currentProcess);
-//
-//                        interruptProcessor.signalInterrupt();
-//                    default:
-//                        break;
-//                }
-//
-//                // add time to Process CPU_Time
-//                cpu.addCPUTime(1);
-//
-//                if (cpu.getCPUTime(currentProcess) > cpu.MAX_CPU_TIME) {
-//                    cpu.setState(scheduler, ProcessState.READY);
-//
-//                    interruptProcessor.signalInterrupt();
-//                }
-//            }
-//        }
-
-        // GUI
+        // Render GUI
         this.readyProcessList.setAll(Scheduler.getReadyQueue().stream().collect(Collectors.toList()));
-        this.waitingProcessList.addAll(Scheduler.getWaitingQueue().stream().collect(Collectors.toList()));
+        this.waitingProcessList.setAll(Scheduler.getWaitingQueue().stream().collect(Collectors.toList()));
 
+        System.out.println(Clock.getClock());
     }
 }

@@ -3,8 +3,7 @@ package Components;
 import java.util.ArrayList;
 
 public class Process {
-
-    private ProcessState state;
+    private ProcessState state = ProcessState.READY;
 
     private int calculate = 0;
     private int arrival;

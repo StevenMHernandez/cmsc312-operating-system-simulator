@@ -16,11 +16,13 @@ public class CPU {
 
     public void setCurrentPCB(Process process) {
         if (this.currentProcess != null) {
-            this.currentProcess.setState(ProcessState.WAIT);
+            this.currentProcess.setState(ProcessState.READY);
         }
-        this.currentProcess = process;
-        this.currentProcess.setState(ProcessState.RUN);
-        Scheduler.resetQuantum();
+        if (process != null) {
+            this.currentProcess = process;
+            this.currentProcess.setState(ProcessState.RUN);
+            Scheduler.resetQuantum();
+        }
     }
 
     public Process execute() {
@@ -52,29 +54,28 @@ public class CPU {
             return null;
     }
 
-//    public ProcessState getState(Process process) {
-//        return process.getState();
-//    }
-//
-//    public void setState(Scheduler scheduler, ProcessState stateIn) {
-//        if (stateIn == ProcessState.WAIT) {
-//            //move process back into scheduler
-//            currentProcess.setState(ProcessState.READY);
-//            scheduler.insertPCB(currentProcess);
-//            this.currentProcess = null;
-//        } else if (stateIn == ProcessState.EXIT) {
-//            currentProcess.setState(stateIn);
-//            this.currentProcess = null;
-//        } else {
-//            currentProcess.setState(stateIn);
-//        }
-//    }
+    public ProcessState getState(Process process) {
+        return process.getState();
+    }
 
-    public static boolean detectInterrupt() {
+    public void setState(Scheduler scheduler, ProcessState stateIn) {
+        if (stateIn == ProcessState.WAIT) {
+            //move process back into scheduler
+            scheduler.insertPCB(currentProcess);
+            this.currentProcess = null;
+        } else if (stateIn == ProcessState.EXIT) {
+            currentProcess.setState(stateIn);
+            this.currentProcess = null;
+        } else {
+            currentProcess.setState(stateIn);
+        }
+    }
+
+    public boolean detectInterrupt() {
         return InterruptProcessor.interrupted;
     }
 
     public boolean detectPreemption() {
-        return EventQueue.peek().time < Clock.getClock();
+        return null != EventQueue.peek() && EventQueue.peek().time < Clock.getClock();
     }
 }

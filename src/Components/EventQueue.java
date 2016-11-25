@@ -2,7 +2,7 @@ package Components;
 import java.util.PriorityQueue;
 
 public class EventQueue {
-    private static PriorityQueue<Event> queue = new PriorityQueue<>(10, (a, b) -> a.time - b.time);
+    public static PriorityQueue<Event> queue = new PriorityQueue<>(10, (a, b) -> a.time - b.time);
 	
     public static void enQueue(Event event) {
     	queue.add(event);

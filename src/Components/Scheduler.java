@@ -11,14 +11,11 @@ public class Scheduler {
     private static int currentQuantum = 0;
 
     public Process getNextPCB() {
-        queue.dequeueReady();
-
-        return null;
+        return queue.dequeueReady();
     }
 
-    public void insertPCB(Process process) {
-        setArrival(process);
-        process.setState(ProcessState.READY);
+    public static void insertPCB(Process process) {
+        process.setArrival(Clock.getClock());
         queue.enqueueReady(process);
     }
 
@@ -44,11 +41,11 @@ public class Scheduler {
     */
 
     public void execute() {
-        if (getReadyQueue().size() > 0 ) {
+        if (getReadyQueue().size() > 0) {
             cpu.setCurrentPCB(queue.dequeueReady());
             Process current = cpu.execute();
             currentQuantum++;
-            if (current != null)
+            if (current != null) {
                 if (current.getState() == ProcessState.WAIT) {
                     queue.enqueueIO(current);
                     currentQuantum = 0;
@@ -60,7 +57,7 @@ public class Scheduler {
                         currentQuantum = 0;
                     }
                 }
-            else {
+            } else {
                 queue.getNextReady();
                 currentQuantum = 0;
             }
@@ -99,5 +96,17 @@ public class Scheduler {
 
     public static void resetQuantum() {
         currentQuantum = 0;
+    }
+
+    public void increaseQuantum() {
+        currentQuantum++;
+    }
+
+    public boolean checkQuantum() {
+        return currentQuantum >= maxQuantum;
+    }
+
+    public void updateQueues() {
+        Scheduler.queue.updateQueues();
     }
 }
