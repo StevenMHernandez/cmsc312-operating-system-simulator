@@ -3,8 +3,6 @@ package Components;
 import java.util.ArrayList;
 
 public class ExecutionQueue {
-
-
     private int freeMemory = 256;
     private ArrayList<Process> readyQueue = new ArrayList<>();
     private ArrayList<Process> waitingQueue = new ArrayList<>();
@@ -47,14 +45,14 @@ public class ExecutionQueue {
     }
 
     public Process dequeueReady() {
-        if (this.readyQueue.size() == 0) {
-            return null;
+        for (Process p : this.readyQueue) {
+            if (p.getState() != ProcessState.BLOCKED) {
+                freeMemory += p.getSize();
+                return p;
+            }
         }
 
-        Process returnProcess = readyQueue.remove(0);
-        freeMemory += returnProcess.getSize();
-
-        return returnProcess;
+        return null;
     }
 
     public Process dequeueWaiting() {
@@ -96,7 +94,7 @@ public class ExecutionQueue {
         // remove old processes
         ArrayList<Process> processToRemove = new ArrayList();
         for (Process p : this.readyQueue) {
-            if (p.getStatus().equals(ProcessState.EXIT)) {
+            if (p.getState() == ProcessState.EXIT) {
                 processToRemove.add(p);
             }
         }

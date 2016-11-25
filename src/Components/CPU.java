@@ -61,7 +61,7 @@ public class CPU {
     public void setState(Scheduler scheduler, ProcessState stateIn) {
         if (stateIn == ProcessState.WAIT) {
             //move process back into scheduler
-            scheduler.insertPCB(currentProcess);
+            Scheduler.insertPCB(currentProcess);
             this.currentProcess = null;
         } else if (stateIn == ProcessState.EXIT) {
             currentProcess.setState(stateIn);

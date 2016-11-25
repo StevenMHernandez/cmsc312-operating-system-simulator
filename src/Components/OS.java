@@ -58,7 +58,7 @@ public class OS {
                 // check if the command needs us to do anything specific
                 switch (nextCommand) {
                     case "IO":
-                        cpu.setState(scheduler, ProcessState.WAIT);
+                        cpu.setState(scheduler, ProcessState.BLOCKED);
 
                         IOScheduler.scheduleIO(currentProcess);
 

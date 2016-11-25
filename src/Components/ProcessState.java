@@ -5,5 +5,6 @@ public enum ProcessState {
     READY,
     RUN,
     WAIT,
+    BLOCKED,
     EXIT
 }
