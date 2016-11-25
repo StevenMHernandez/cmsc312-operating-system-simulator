@@ -15,7 +15,8 @@ public class parseText {
     }
 
     public void parseFile(String filename) {
-        this.inputfile = filename;
+        this.inputfile = "programs\\" + filename;
+        System.out.println(inputfile);
         parseFile();
     }
 
