@@ -3,7 +3,7 @@ package Components;
 public class InterruptProcessor {
     public static boolean interrupted = false;
 
-    public void signalInterrupt() {
+    public static void signalInterrupt() {
         interrupted = true;
     }
 

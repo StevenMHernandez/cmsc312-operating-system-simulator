@@ -7,7 +7,7 @@ public class Scheduler {
     private static ExecutionQueue queue = new ExecutionQueue();
     private CPU cpu = new CPU();
 
-    private static int maxQuantum = 3;
+    private static int maxQuantum = 10;
     private static int currentQuantum = 0;
 
     public Process getNextPCB() {

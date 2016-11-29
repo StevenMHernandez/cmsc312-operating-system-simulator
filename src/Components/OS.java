@@ -34,48 +34,23 @@ public class OS {
         if (null != cpu.getCurrentPCB()) {
             Process currentProcess = cpu.getCurrentPCB();
 
-            cpu.setState(scheduler, ProcessState.RUN);
+            cpu.setState(ProcessState.RUN);
 
             if (currentProcess.getQueue().isEmpty()) {
-                cpu.setState(scheduler, ProcessState.EXIT);
+                cpu.setState(ProcessState.EXIT);
 
-                interruptProcessor.signalInterrupt();
-                return;
+                InterruptProcessor.signalInterrupt();
             } else {
-                // read next line from our process's queue. (dequeue)
-                String nextCommand = currentProcess.getQueue().remove(0);
-
-                // check if the command has parameters we should read (remove from the queue)
-                switch (nextCommand) {
-                    case "CALCULATE":
-                    case "OUT":
-                        currentProcess.getQueue().remove(0);
-                        break;
-                    default:
-                        break;
-                }
-
-                // check if the command needs us to do anything specific
-                switch (nextCommand) {
-                    case "IO":
-                        cpu.setState(scheduler, ProcessState.BLOCKED);
-
-                        IOScheduler.scheduleIO(currentProcess);
-
-                        interruptProcessor.signalInterrupt();
-                        return;
-                    default:
-                        break;
-                }
+                cpu.execute();
 
                 // add time to Process CPU_Time
                 scheduler.increaseQuantum();
 
                 if (scheduler.checkQuantum()) {
-                    cpu.setState(scheduler, ProcessState.READY);
-                    System.out.println("Done");
+                    Scheduler.resetQuantum();
+                    cpu.setState(ProcessState.READY);
 
-                    interruptProcessor.signalInterrupt();
+                    InterruptProcessor.signalInterrupt();
                 }
             }
         }

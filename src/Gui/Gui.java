@@ -124,19 +124,21 @@ public class Gui extends Application {
         // TODO: remove these test process
         ArrayList<String> commands = new ArrayList<String>();
         commands.add("CALCULATE");
-        commands.add("33");
+        commands.add("2");
         commands.add("CALCULATE");
         commands.add("33");
+        commands.add("OUT");
+        commands.add("\"WORDS\"");
         commands.add("IO");
         commands.add("CALCULATE");
         commands.add("33");
 
-        Scheduler.insertPCB(new Process(commands, 128));
-        Scheduler.insertPCB(new Process(commands, 96));
-        Scheduler.insertPCB(new Process(commands, 24));
-        Scheduler.insertPCB(new Process(commands, 64));
-        Scheduler.insertPCB(new Process(commands, 128));
-        Scheduler.insertPCB(new Process(commands, 32));
+        Scheduler.insertPCB(new Process("webbrowser", new ArrayList<>(commands), 128));
+        Scheduler.insertPCB(new Process("textedit", new ArrayList<>(commands), 96));
+        Scheduler.insertPCB(new Process("dj-touchbar", new ArrayList<>(commands), 24));
+        Scheduler.insertPCB(new Process("GUI", new ArrayList<>(commands), 64));
+        Scheduler.insertPCB(new Process("paint", new ArrayList<>(commands), 128));
+        Scheduler.insertPCB(new Process("sound", new ArrayList<>(commands), 32));
 
 
         this.readyProcessList.setAll(Scheduler.getReadyQueue().stream().collect(Collectors.toList()));
@@ -146,14 +148,14 @@ public class Gui extends Application {
 
         new AnimationTimer() {
             @Override public void handle(long currentNanoTime) {
-                if (currentNanoTime > prevTime[0] + 400000000) {
+                if (currentNanoTime > prevTime[0] + 90000000) {
                     try {
                         loop();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 
-                    prevTime[0] = currentNanoTime + 400000000;
+                    prevTime[0] = currentNanoTime + 90000000;
                 }
             }
         }.start();
@@ -171,7 +173,5 @@ public class Gui extends Application {
         // Render GUI
         this.readyProcessList.setAll(Scheduler.getReadyQueue().stream().collect(Collectors.toList()));
         this.waitingProcessList.setAll(Scheduler.getWaitingQueue().stream().collect(Collectors.toList()));
-
-        System.out.println(Clock.getClock());
     }
 }

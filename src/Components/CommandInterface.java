@@ -65,7 +65,7 @@ public class CommandInterface extends Gui{
         pt.parseFile(job);
         if(!pt.getQueue().isEmpty()) {
             int size = Integer.valueOf(pt.getQueue().remove(0));
-            Scheduler.insertPCB(new Process(pt.getQueue(), size));
+            Scheduler.insertPCB(new Process(job, pt.getQueue(), size));
         }
     }
 

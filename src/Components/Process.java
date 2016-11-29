@@ -7,26 +7,18 @@ public class Process {
 
     private int calculate = 0;
     private int arrival;
-    private int ioRequested = 0;
 
     private ArrayList<String> queue;
 
-    public String name = "Process Name";
+    public String name;
 
     private int size;
 
-    public Process(ArrayList<String> queue, int size) {
+    public Process(String name, ArrayList<String> queue, int size) {
+        this.name = name;
         this.queue = queue;
         this.size = size;
         this.state = ProcessState.NEW;
-    }
-
-    public void incrementIoRequested() {
-        ioRequested++;
-    }
-
-    public int getIoRequested() {
-        return ioRequested;
     }
 
     public int getCalculate() {

@@ -26,8 +26,9 @@ public class CPU {
     }
 
     public Process execute() {
-        String command = currentProcess.getQueue().remove(0);
         if (currentProcess.getCalculate() == 0) {
+            String command = currentProcess.getQueue().remove(0);
+
             switch (command) {
                 case "CALCULATE":
                     currentProcess.setCalculate(Integer.valueOf(currentProcess.getQueue().remove(0)));
@@ -43,10 +44,11 @@ public class CPU {
                 case "YIELD":
                     break;
                 case "IO":
-                    //process IO
-                    currentProcess.incrementIoRequested();
-                    currentProcess.setState(ProcessState.WAIT);
-                    return currentProcess;
+                    this.setState(ProcessState.BLOCKED);
+
+                    IOScheduler.scheduleIO(currentProcess);
+
+                    InterruptProcessor.signalInterrupt();
                 default:
                     break;
             }
@@ -64,7 +66,7 @@ public class CPU {
         return process.getState();
     }
 
-    public void setState(Scheduler scheduler, ProcessState stateIn) {
+    public void setState(ProcessState stateIn) {
         if (stateIn == ProcessState.WAIT) {
             //move process back into scheduler
             Scheduler.insertPCB(currentProcess);
