@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class Scheduler {
 
     private static ExecutionQueue queue = new ExecutionQueue();
-    private CPU cpu = new CPU();
 
     private static int maxQuantum = 10;
     private static int currentQuantum = 0;
@@ -39,36 +38,6 @@ public class Scheduler {
         process.setState(stateIn);
     }
     */
-
-    public void execute() {
-        if (getReadyQueue().size() > 0) {
-            cpu.setCurrentPCB(queue.dequeueReady());
-            Process current = cpu.execute();
-            currentQuantum++;
-            if (current != null) {
-                if (current.getState() == ProcessState.WAIT) {
-                    queue.enqueueIO(current);
-                    currentQuantum = 0;
-                } else {
-                    if (currentQuantum < maxQuantum) {
-                        queue.replaceReady(current);
-                    } else {
-                        queue.enqueueReady(current);
-                        currentQuantum = 0;
-                    }
-                }
-            } else {
-                queue.getNextReady();
-                currentQuantum = 0;
-            }
-
-            if (queue.getFreeMemory() > 0) {
-                queue.getNextReady();
-            }
-        }
-
-        CPU.advanceClock();
-    }
 
     public int getWait(Process process) {
         return process.getWait();

@@ -3,16 +3,18 @@ package Components;
 import java.util.ArrayList;
 
 public class Process {
-    private ProcessState state = ProcessState.READY;
 
     private int calculate = 0;
     private int arrival;
-
-    private ArrayList<String> queue;
+    private int size;
+    private int runTime = 0;
 
     public String name;
+    private String lastCommand;
 
-    private int size;
+    private ProcessState state = ProcessState.READY;
+
+    private ArrayList<String> queue;
 
     public Process(String name, ArrayList<String> queue, int size) {
         this.name = name;
@@ -71,5 +73,25 @@ public class Process {
 
     public int getWait() {
         return Clock.getClock() - arrival;
+    }
+
+    public String getLastCommand() {
+        if (null != this.lastCommand && this.lastCommand.equals("CALCULATE")) {
+            return this.lastCommand + "(" + this.calculate + ")";
+        }
+
+        return this.lastCommand;
+    }
+
+    public void setLastCommand(String lastCommand) {
+        this.lastCommand = lastCommand;
+    }
+
+    public int getRunTime() {
+        return runTime;
+    }
+
+    public void incrementRunTime() {
+        this.runTime++;
     }
 }

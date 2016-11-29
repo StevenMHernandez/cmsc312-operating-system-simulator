@@ -5,7 +5,7 @@ public class IOScheduler {
 
     public static void scheduleIO(Process process){
         Event event = new Event(process, ioBurst.generateIOBurst(), "IO");
-        EventQueue.enQueue(event);
+        InterruptProcessor.addEvent(event);
     }
 
     public static void startIO() {

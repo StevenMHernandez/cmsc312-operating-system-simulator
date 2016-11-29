@@ -1,6 +1,7 @@
 package Components;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ExecutionQueue {
     private int freeMemory = 256;
@@ -45,6 +46,18 @@ public class ExecutionQueue {
     }
 
     public Process dequeueReady() {
+        // rotate queue, round robin (only if there are unblocked processes)
+        int unblocked = 0;
+        for (Process p : this.readyQueue) {
+            if (p.getState() != ProcessState.BLOCKED) {
+                unblocked++;
+            }
+        }
+        if (unblocked > 0) {
+            Collections.rotate(this.readyQueue, 1);
+        }
+
+        // return process
         for (Process p : this.readyQueue) {
             if (p.getState() != ProcessState.BLOCKED) {
                 freeMemory += p.getSize();

@@ -38,8 +38,6 @@ public class Gui extends Application {
 
     private final ObservableList<Process> readyProcessList = FXCollections.observableArrayList();
     private final ObservableList<Process> waitingProcessList = FXCollections.observableArrayList();
-    protected static Scheduler scheduler;
-    private InterruptProcessor interruptProcessor;
     private boolean exeContinuously = true;
     private int exeSteps = -1;
 
@@ -66,13 +64,20 @@ public class Gui extends Application {
         ObservableList<Process> processList = FXCollections.observableArrayList();
         processTable.setItems(processList);
 
+        // Ready Processes
         TableColumn nameCol = new TableColumn("Process");
         nameCol.setCellValueFactory(new PropertyValueFactory<Process, String>("name"));
         TableColumn arrivalCol = new TableColumn("Arrival Time");
         arrivalCol.setCellValueFactory(new PropertyValueFactory<Process, String>("arrival"));
+        TableColumn runTimeCol = new TableColumn("Run Time");
+        runTimeCol.setCellValueFactory(new PropertyValueFactory<Process, String>("runTime"));
         TableColumn statusCol = new TableColumn("Status");
         statusCol.setCellValueFactory(new PropertyValueFactory<Process, String>("status"));
+        TableColumn commandCol = new TableColumn("Last Command");
+        commandCol.setCellValueFactory(new PropertyValueFactory<Process, String>("lastCommand"));
+        commandCol.setPrefWidth(140);
 
+        // Waiting Processes
         TableColumn nameCol2 = new TableColumn("Process");
         nameCol2.setCellValueFactory(new PropertyValueFactory<Process, String>("name"));
         TableColumn arrivalCol2 = new TableColumn("Arrival Time");
@@ -87,13 +92,11 @@ public class Gui extends Application {
         waitingTable = new TableView();
 
         readyTable.setItems(this.readyProcessList);
-        readyTable.getColumns().addAll(nameCol, arrivalCol, statusCol);
+        readyTable.getColumns().addAll(nameCol, arrivalCol, runTimeCol, statusCol, commandCol);
         waitingTable.setItems(this.waitingProcessList);
         waitingTable.getColumns().addAll(nameCol2, arrivalCol2, statusCol2);
 
-
-
-        textInput = new TextField("temporarily out of order");
+        textInput = new TextField();
         textInput.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -112,7 +115,7 @@ public class Gui extends Application {
         layout.setRight(readyTable);
         layout.setLeft(waitingTable);
 
-        Scene scene = new Scene(layout, 600, 600);
+        Scene scene = new Scene(layout, 900, 600);
         window.setScene(scene);
 
         window.show();
@@ -126,7 +129,7 @@ public class Gui extends Application {
         commands.add("CALCULATE");
         commands.add("2");
         commands.add("CALCULATE");
-        commands.add("33");
+        commands.add("10");
         commands.add("OUT");
         commands.add("\"WORDS\"");
         commands.add("IO");

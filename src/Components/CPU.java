@@ -15,19 +15,21 @@ public class CPU {
     }
 
     public void setCurrentPCB(Process process) {
-        if (this.currentProcess != null) {
-            this.currentProcess.setState(ProcessState.READY);
-        }
+        this.currentProcess = process;
+
         if (process != null) {
-            this.currentProcess = process;
             this.currentProcess.setState(ProcessState.RUN);
             Scheduler.resetQuantum();
         }
     }
 
     public Process execute() {
+        currentProcess.incrementRunTime();
+
         if (currentProcess.getCalculate() == 0) {
             String command = currentProcess.getQueue().remove(0);
+
+            currentProcess.setLastCommand(command);
 
             switch (command) {
                 case "CALCULATE":

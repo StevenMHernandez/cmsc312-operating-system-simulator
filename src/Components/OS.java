@@ -6,8 +6,6 @@ public class OS {
     private InterruptProcessor interruptProcessor = new InterruptProcessor();
 
     public void execute() {
-        cpu.advanceClock();
-
         // if there is room for process, remove them from the waiting queue
         // and remove and process that are labeled as `EXIT`
         scheduler.updateQueues();
@@ -15,15 +13,24 @@ public class OS {
         // check for interrupts
         if (cpu.detectInterrupt() || null == cpu.getCurrentPCB()) {
             cpu.setCurrentPCB(scheduler.getNextPCB());
+            if (null != cpu.getCurrentPCB()) {
+                cpu.setState(ProcessState.RUN);
+            }
         }
+
+        cpu.advanceClock();
 
         // check for events
         if (cpu.detectPreemption()) {
-            Event event = EventQueue.deQueue();
+            Event event = InterruptProcessor.getEvent();
 
             switch (event.type) {
                 case "IO":
+                    if (null != cpu.getCurrentPCB()) {
+                        cpu.setState(ProcessState.READY);
+                    }
                     cpu.setCurrentPCB(event.process);
+                    cpu.setState(ProcessState.RUN);
                     break;
                 default:
                     break;
@@ -33,8 +40,6 @@ public class OS {
         // there may not be any more readyProcessList from the scheduler
         if (null != cpu.getCurrentPCB()) {
             Process currentProcess = cpu.getCurrentPCB();
-
-            cpu.setState(ProcessState.RUN);
 
             if (currentProcess.getQueue().isEmpty()) {
                 cpu.setState(ProcessState.EXIT);

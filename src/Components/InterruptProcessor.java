@@ -4,14 +4,14 @@ public class InterruptProcessor {
     public static boolean interrupted = false;
 
     public static void signalInterrupt() {
-        interrupted = true;
+        InterruptProcessor.interrupted = true;
     }
 
-    public void addEvent(Event event) {
-        // TODO
+    public static void addEvent(Event event) {
+        EventQueue.enQueue(event);
     }
 
-    public Event getEvent() {
-        return null;
+    public static Event getEvent() {
+        return EventQueue.deQueue();
     }
 }
