@@ -59,7 +59,7 @@ public class ExecutionQueue {
         // return process
         for (Process p : this.readyQueue) {
             if (p.getState() != ProcessState.BLOCKED) {
-                freeMemory += p.getSize();
+                //freeMemory += p.getSize();
                 return p;
             }
         }
@@ -112,6 +112,7 @@ public class ExecutionQueue {
         }
 
         for (Process p : processToRemove) {
+            freeMemory += p.getSize();
             this.readyQueue.remove(p);
         }
 

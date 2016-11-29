@@ -60,6 +60,8 @@ public class Gui extends Application {
         // Ready Processes
         TableColumn nameCol = new TableColumn("Process");
         nameCol.setCellValueFactory(new PropertyValueFactory<Process, String>("name"));
+        TableColumn sizeCol = new TableColumn("Size");
+        sizeCol.setCellValueFactory(new PropertyValueFactory<Process, String>("size"));
         TableColumn arrivalCol = new TableColumn("Arrival Time");
         arrivalCol.setCellValueFactory(new PropertyValueFactory<Process, String>("arrival"));
         TableColumn runTimeCol = new TableColumn("Run Time");
@@ -73,6 +75,8 @@ public class Gui extends Application {
         // Waiting Processes
         TableColumn nameCol2 = new TableColumn("Process");
         nameCol2.setCellValueFactory(new PropertyValueFactory<Process, String>("name"));
+        TableColumn sizeCol2 = new TableColumn("Size");
+        sizeCol2.setCellValueFactory(new PropertyValueFactory<Process, String>("size"));
         TableColumn arrivalCol2 = new TableColumn("Arrival Time");
         arrivalCol2.setCellValueFactory(new PropertyValueFactory<Process, String>("arrival"));
         TableColumn statusCol2 = new TableColumn("Status");
@@ -85,9 +89,9 @@ public class Gui extends Application {
         waitingTable = new TableView();
 
         readyTable.setItems(this.readyProcessList);
-        readyTable.getColumns().addAll(nameCol, arrivalCol, runTimeCol, statusCol, commandCol);
+        readyTable.getColumns().addAll(nameCol, sizeCol, arrivalCol, runTimeCol, statusCol, commandCol);
         waitingTable.setItems(this.waitingProcessList);
-        waitingTable.getColumns().addAll(nameCol2, arrivalCol2, statusCol2);
+        waitingTable.getColumns().addAll(nameCol2, sizeCol2, arrivalCol2, statusCol2);
 
         textInput = new TextField();
         textInput.setOnKeyPressed(new EventHandler<KeyEvent>() {
