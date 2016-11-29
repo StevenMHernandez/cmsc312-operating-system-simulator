@@ -2,7 +2,7 @@ package Components;
 
 public class Memory {
 
-    private final static int totalMemory = 256000000;
+    private final static int totalMemory = 256; //kb
     private int usedMemory = 0;
 
     public int addUsedMemory(int value) {

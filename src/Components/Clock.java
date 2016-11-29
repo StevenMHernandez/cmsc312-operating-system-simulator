@@ -15,4 +15,8 @@ public class Clock {
     public static int advanceClock() {
         return tick++;
     }
+
+    public static void reset() {
+        tick = 0;
+    }
 }

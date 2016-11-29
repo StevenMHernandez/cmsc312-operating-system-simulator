@@ -4,15 +4,12 @@ import Gui.Gui;
 import Parsing.parseText;
 
 public class CommandInterface extends Gui{
-
-
     private static final parseText pt = new parseText();
 
     public static boolean temporaryName(String input) {
         pt.parseLine(input);
         boolean valid = valid();
         if (valid) {
-
             if (pt.getValue() == null)
                 chooseCommand(pt.getCommand());
             else
@@ -49,8 +46,11 @@ public class CommandInterface extends Gui{
     }
 
     private static void chooseCommand(String command, String value) {
-        if(command.equals("load"))
-            load(value);
+        switch(command) {
+            case "load": load(value); break;
+            case "exe": exe(Integer.parseInt(value)); break;
+            default: break;
+        }
     }
 
     private static void proc() {
@@ -70,15 +70,23 @@ public class CommandInterface extends Gui{
     }
 
     private static void exe() {
-        // scheduler.insertPCB()
+        Simulator.exeContinuously = true;
+        Simulator.exeSteps = -1;
+    }
+
+    private static void exe(int steps) {
+        Simulator.exeContinuously = false;
+        Simulator.exeSteps = steps;
     }
 
     private static void reset() {
-        Scheduler.resetQuantum();
+        Scheduler.reset();
+        Clock.reset();
+        EventQueue.reset();
     }
 
     private static void exit() {
-
+        System.exit(0);
     }
 
     public void promptUser(){

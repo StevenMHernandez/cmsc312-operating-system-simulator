@@ -1,5 +1,7 @@
 package Parsing;
 
+import Components.GuiScreen;
+
 import java.util.*;
 import java.io.*;
 
@@ -15,8 +17,7 @@ public class parseText {
     }
 
     public void parseFile(String filename) {
-        this.inputfile = "programs\\" + filename;
-        System.out.println(inputfile);
+        this.inputfile = "programs/" + filename + ".txt";
         parseFile();
     }
 
@@ -25,7 +26,7 @@ public class parseText {
         input = new Scanner(command);
         this.command = input.next();
         value = null;
-        if(input.hasNext())
+        if (input.hasNext())
             value = input.next();
         input.close();
     }
@@ -35,10 +36,12 @@ public class parseText {
         try {
             File file = new File(inputfile);
             input = new Scanner(file);
-            while(input.hasNext()) {
+            while (input.hasNext()) {
                 queue.add(input.next());
             }
-        } catch (Exception e) { System.out.println("File not found"); }
+        } catch (Exception e) {
+            GuiScreen.println("Program not found.");
+        }
         input.close();
     }
 

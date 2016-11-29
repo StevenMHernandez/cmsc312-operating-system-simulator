@@ -9,7 +9,6 @@ public class ExecutionQueue {
     private ArrayList<Process> waitingQueue = new ArrayList<>();
     private ArrayList<Process> ioQueue = new ArrayList<>();
 
-
     public void enqueueReady(Process process) {
         if (process.getSize() < freeMemory) {
             process.setState(ProcessState.READY);
@@ -124,5 +123,12 @@ public class ExecutionQueue {
                 this.waitingQueue.remove(p);
             }
         }
+    }
+
+    public void reset() {
+        this.freeMemory = 256;
+        this.readyQueue.clear();
+        this.waitingQueue.clear();
+        this.ioQueue.clear();
     }
 }

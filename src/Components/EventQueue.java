@@ -15,4 +15,8 @@ public class EventQueue {
     public static Event deQueue() {
         return queue.poll();
     }
+
+    public static void reset() {
+        queue.clear();
+    }
 }

@@ -36,14 +36,20 @@ public class CPU {
                     currentProcess.setCalculate(Integer.valueOf(currentProcess.getQueue().remove(0)));
                     return currentProcess;
                 case "OUT":
-                    String out = currentProcess.getQueue().remove(0).substring(1);
-                    while (!out.substring(out.length()-1).equals("\"")) {
+                    String out = currentProcess.getName() + "::";
+                    out += currentProcess.getQueue().remove(0).substring(1);
+
+                    while (!out.substring(out.length() - 1).equals("\"")) {
                         out = out + " " + currentProcess.getQueue().remove(0);
                     }
-                    out = out.substring(0, out.length()-1);
-                    System.out.println(out); //display to textarea
+                    out = out.substring(0, out.length() - 1);
+
+                    GuiScreen.println(out);
                     break;
                 case "YIELD":
+                    this.setState(ProcessState.READY);
+
+                    InterruptProcessor.signalInterrupt();
                     break;
                 case "IO":
                     this.setState(ProcessState.BLOCKED);

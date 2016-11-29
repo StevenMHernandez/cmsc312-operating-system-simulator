@@ -1,14 +1,9 @@
 package Gui;
 
-import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import Components.Clock;
-import Components.CommandInterface;
-import Components.InterruptProcessor;
-import Components.OS;
+import Components.*;
 import Components.Process;
-import Components.Scheduler;
 import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -38,8 +33,6 @@ public class Gui extends Application {
 
     private final ObservableList<Process> readyProcessList = FXCollections.observableArrayList();
     private final ObservableList<Process> waitingProcessList = FXCollections.observableArrayList();
-    private boolean exeContinuously = true;
-    private int exeSteps = -1;
 
     OS os = new OS();
 
@@ -124,26 +117,6 @@ public class Gui extends Application {
     }
 
     public void startup() throws InterruptedException {
-        // TODO: remove these test process
-        ArrayList<String> commands = new ArrayList<String>();
-        commands.add("CALCULATE");
-        commands.add("2");
-        commands.add("CALCULATE");
-        commands.add("10");
-        commands.add("OUT");
-        commands.add("\"WORDS\"");
-        commands.add("IO");
-        commands.add("CALCULATE");
-        commands.add("33");
-
-        Scheduler.insertPCB(new Process("webbrowser", new ArrayList<>(commands), 128));
-        Scheduler.insertPCB(new Process("textedit", new ArrayList<>(commands), 96));
-        Scheduler.insertPCB(new Process("dj-touchbar", new ArrayList<>(commands), 24));
-        Scheduler.insertPCB(new Process("GUI", new ArrayList<>(commands), 64));
-        Scheduler.insertPCB(new Process("paint", new ArrayList<>(commands), 128));
-        Scheduler.insertPCB(new Process("sound", new ArrayList<>(commands), 32));
-
-
         this.readyProcessList.setAll(Scheduler.getReadyQueue().stream().collect(Collectors.toList()));
         this.waitingProcessList.setAll(Scheduler.getWaitingQueue().stream().collect(Collectors.toList()));
 
@@ -165,16 +138,17 @@ public class Gui extends Application {
     }
 
     public void loop() throws InterruptedException {
-        if (!exeContinuously && exeSteps == 0) {
-            return;
-        } else {
-            exeSteps--;
-        }
-
-        os.execute();
-
         // Render GUI
         this.readyProcessList.setAll(Scheduler.getReadyQueue().stream().collect(Collectors.toList()));
         this.waitingProcessList.setAll(Scheduler.getWaitingQueue().stream().collect(Collectors.toList()));
+
+        // Run Simulator
+        if (!Simulator.exeContinuously && Simulator.exeSteps == 0) {
+            return;
+        } else {
+            Simulator.exeSteps--;
+        }
+
+        os.execute();
     }
 }

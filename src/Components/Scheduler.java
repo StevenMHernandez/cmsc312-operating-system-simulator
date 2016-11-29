@@ -78,4 +78,9 @@ public class Scheduler {
     public void updateQueues() {
         Scheduler.queue.updateQueues();
     }
+
+    public static void reset() {
+        Scheduler.resetQuantum();
+        queue.reset();
+    }
 }

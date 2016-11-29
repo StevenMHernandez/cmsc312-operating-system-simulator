@@ -3,7 +3,6 @@ package Components;
 public class OS {
     private Scheduler scheduler = new Scheduler();
     private CPU cpu = new CPU();
-    private InterruptProcessor interruptProcessor = new InterruptProcessor();
 
     public void execute() {
         // if there is room for process, remove them from the waiting queue
