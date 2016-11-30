@@ -118,10 +118,12 @@ public class ExecutionQueue {
 
         // add waiting processes
         if (this.freeMemory > 0 && this.waitingQueue.size() > 0) {
-            Process p = this.waitingQueue.get(0);
-            if (p.getSize() < this.freeMemory) {
-                this.enqueueReady(p);
-                this.waitingQueue.remove(p);
+            for (int i = 0; i < waitingQueue.size(); i++) {
+                Process p = waitingQueue.get(i);
+                if (p.getSize() < this.freeMemory) {
+                    this.enqueueReady(p);
+                    this.waitingQueue.remove(i);
+                }
             }
         }
     }

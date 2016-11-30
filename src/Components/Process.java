@@ -14,13 +14,17 @@ public class Process {
 
     private ProcessState state = ProcessState.READY;
 
-    private ArrayList<String> queue;
+    private ArrayList<String> queue = new ArrayList<>();
 
-    public Process(String name, ArrayList<String> queue, int size) {
+    public Process(String name, ArrayList<String> queueIn, int size) {
         this.name = name;
-        this.queue = queue;
+        //this.queue = queueIn;
         this.size = size;
         this.state = ProcessState.NEW;
+
+        for (int i = 0; i < queueIn.size(); i++) {
+            this.queue.add(queueIn.get(i));
+        }
     }
 
     public int getCalculate() {

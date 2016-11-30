@@ -80,6 +80,8 @@ public class CommandInterface extends Gui{
     }
 
     private static void reset() {
+        Simulator.exeContinuously = false;
+        Simulator.exeSteps = 0;
         Scheduler.reset();
         Clock.reset();
         EventQueue.reset();
