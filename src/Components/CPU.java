@@ -1,5 +1,7 @@
 package Components;
 
+import Gui.GuiScreen;
+
 public class CPU {
 
     private Process currentProcess;

@@ -1,6 +1,6 @@
 package Parsing;
 
-import Components.GuiScreen;
+import Gui.GuiScreen;
 
 import java.util.*;
 import java.io.*;

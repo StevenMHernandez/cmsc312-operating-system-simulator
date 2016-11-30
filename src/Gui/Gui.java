@@ -22,14 +22,16 @@ import javafx.application.Application;
 
 public class Gui extends Application {
 
-    Stage window;
-    BorderPane layout;
-    HBox lowerBox;
-    TextField textInput;
-    TextArea textArea;
-    Button button;
-    TableView readyTable;
-    TableView waitingTable;
+    private Stage window;
+    private BorderPane layout;
+    private HBox lowerBox;
+    private TextField textInput;
+    private Button button, testbutton;
+    private TableView readyTable;
+    private TableView waitingTable;
+    private Label label;
+
+    static protected TextArea textArea;
 
     private final ObservableList<Process> readyProcessList = FXCollections.observableArrayList();
     private final ObservableList<Process> waitingProcessList = FXCollections.observableArrayList();
@@ -103,11 +105,18 @@ public class Gui extends Application {
             }
         });
 
+        textArea = new TextArea();
+        textArea.setEditable(false);
+        textArea.setMouseTransparent(true);
+        textArea.setFocusTraversable(false);
+        textArea.setPrefRowCount(3);
+        textArea.autosize();
+
         layout = new BorderPane();
         lowerBox = new HBox();
         lowerBox.setPadding(new Insets(10, 10, 10, 10));
         lowerBox.setSpacing(10);
-        lowerBox.getChildren().addAll(textInput, button);
+        lowerBox.getChildren().addAll(textInput, button, textArea);
         layout.setBottom(lowerBox);
         layout.setRight(readyTable);
         layout.setLeft(waitingTable);

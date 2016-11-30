@@ -1,12 +1,12 @@
-package Components;
+package Gui;
 
 import java.util.ArrayList;
 
-public class GuiScreen {
+public class GuiScreen extends Gui {
     public static ArrayList<String> output = new ArrayList<>();
 
     public static void println(String string) {
-        System.out.println(string);
+        textArea.appendText(string + "\n");
 
         output.add(string);
     }

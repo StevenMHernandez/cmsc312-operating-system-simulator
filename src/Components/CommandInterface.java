@@ -1,6 +1,7 @@
 package Components;
 
 import Gui.Gui;
+import Gui.GuiScreen;
 import Parsing.parseText;
 
 public class CommandInterface extends Gui{
@@ -29,6 +30,8 @@ public class CommandInterface extends Gui{
             return true;
         if(pt.getCommand().equals("exit"))
             return true;
+        if(pt.getCommand().equals("clear"))
+            return true;
         if(pt.getCommand().equals("load")) if(pt.getValue() != null)
             return true;
         return false;
@@ -41,6 +44,7 @@ public class CommandInterface extends Gui{
             case "exe": exe(); break;
             case "reset": reset(); break;
             case "exit": exit(); break;
+            case "clear": clear(); break;
             default: break;
         }
     }
@@ -58,7 +62,7 @@ public class CommandInterface extends Gui{
     }
 
     private static void mem() {
-
+        GuiScreen.println("Memory: " + String.valueOf(Memory.getUsedMemory()) + "/" + String.valueOf(Memory.getTotalMemory()) + "\n");
     }
 
     private static void load(String job) {
@@ -89,6 +93,10 @@ public class CommandInterface extends Gui{
 
     private static void exit() {
         System.exit(0);
+    }
+
+    private static void clear() {
+        textArea.clear();
     }
 
     public void promptUser(){

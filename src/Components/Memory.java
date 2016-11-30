@@ -3,7 +3,7 @@ package Components;
 public class Memory {
 
     private final static int totalMemory = 256; //kb
-    private int usedMemory = 0;
+    private static int usedMemory = 0;
 
     public int addUsedMemory(int value) {
         usedMemory = usedMemory + value;
@@ -17,15 +17,15 @@ public class Memory {
         return usedMemory;
     }
 
-    public int getTotalMemory() {
+    public static int getTotalMemory() {
         return totalMemory;
     }
 
-    public int getUsedMemory() {
+    public static int getUsedMemory() {
         return usedMemory;
     }
 
-    public int getFreeMemory() {
+    public static int getFreeMemory() {
         return totalMemory - usedMemory;
     }
 
