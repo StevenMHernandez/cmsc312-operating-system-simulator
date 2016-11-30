@@ -18,3 +18,15 @@ Implementation of an operating system simulator
 ## Program File Generation
 
 To generate some more random program files, simply open up `scripts/build_programs.html` in a web browser.
+
+## Commands
+
+* load <program name> - Load the specified program into the simulation.
+* exe <number of cycles> - Run the simulator for the given number of cycles.
+* exe - Run the simulator continuously. You can use "exe 0" to pause the simulation.
+* reset - Clear all programs and reset the clock to 0.
+* clear - Clear the text area.
+* mem - Print the amount of used memory to the screen.
+* exit - Closes the simulation.
+
+## 
