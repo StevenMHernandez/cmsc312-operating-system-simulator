@@ -110,6 +110,7 @@ public class Gui extends Application {
         textArea.setMouseTransparent(true);
         textArea.setFocusTraversable(false);
         textArea.setPrefRowCount(3);
+        textArea.setPrefColumnCount(50);
         textArea.autosize();
 
         layout = new BorderPane();

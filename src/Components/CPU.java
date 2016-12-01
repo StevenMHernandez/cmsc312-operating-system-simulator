@@ -54,6 +54,7 @@ public class CPU {
                     InterruptProcessor.signalInterrupt();
                     break;
                 case "IO":
+                    currentProcess.incrementIoRequests();
                     this.setState(ProcessState.BLOCKED);
 
                     IOScheduler.scheduleIO(currentProcess);

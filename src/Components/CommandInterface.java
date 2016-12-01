@@ -3,6 +3,7 @@ package Components;
 import Gui.Gui;
 import Gui.GuiScreen;
 import Parsing.parseText;
+import java.util.ArrayList;
 
 public class CommandInterface extends Gui{
     private static final parseText pt = new parseText();
@@ -58,7 +59,17 @@ public class CommandInterface extends Gui{
     }
 
     private static void proc() {
-
+        ArrayList<Process> queue = Scheduler.getReadyQueue();
+        if (queue.isEmpty())
+            GuiScreen.println("No processes are current running.");
+        String space = "     ";
+        for (Process process: queue) {
+            GuiScreen.print("Process: " + process.getName() + space);
+            GuiScreen.print("State: " + process.getState() + space);
+            GuiScreen.print("Runtime: " + process.getRunTime() + space);
+            GuiScreen.print("Remaining Runtime: " + (process.getTotalRuntime()-process.getRunTime()) + space);
+            GuiScreen.println("Io Requests: " + process.getIoRequests());
+        }
     }
 
     private static void mem() {

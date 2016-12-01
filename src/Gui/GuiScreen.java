@@ -10,4 +10,10 @@ public class GuiScreen extends Gui {
 
         output.add(string);
     }
+
+    public static void print(String string) {
+        textArea.appendText(string);
+
+        output.add(string);
+    }
 }
