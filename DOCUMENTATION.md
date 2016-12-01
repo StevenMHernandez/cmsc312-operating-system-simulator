@@ -9,6 +9,7 @@ Simply double click the `cmsc312-operating-system-simulator.jar` file to view th
 
 ### Commands
 
+* proc - Prints a list of the currently running processes and runtime information
 * load <program name> - Load the specified program into the simulation.
 * exe <number of cycles> - Run the simulator for the given number of cycles.
 * exe - Run the simulator continuously. You can use "exe 0" to pause the simulation.
