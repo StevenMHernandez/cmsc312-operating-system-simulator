@@ -25,7 +25,9 @@ public class CommandInterface extends Gui{
             return true;
         if(pt.getCommand().equals("mem"))
             return true;
-        if(pt.getCommand().equals("exe"))
+        if(pt.getCommand().equals("exe")) if(pt.getValue() == null)
+            return true;
+        if(pt.getCommand().equals("exe")) if(pt.getValue() != null) if(isInt(pt.getValue()))
             return true;
         if(pt.getCommand().equals("reset"))
             return true;
@@ -36,6 +38,26 @@ public class CommandInterface extends Gui{
         if(pt.getCommand().equals("load")) if(pt.getValue() != null)
             return true;
         return false;
+    }
+
+    private static boolean isInt(String value) {
+        if (value == null || value.isEmpty()) {
+            return false;
+        }
+        int i = 0;
+        if (value.charAt(0) == '-') {
+            if (value.length() > 1) {
+                i++;
+            } else {
+                return false;
+            }
+        }
+        for (; i < value.length(); i++) {
+            if (!Character.isDigit(value.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static void chooseCommand(String command) {
