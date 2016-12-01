@@ -23,3 +23,15 @@ Simply double click the `cmsc312-operating-system-simulator.jar` file to view th
 * paint (212 KB)
 * textedit (66 KB)
 * web_browser (259 KB)
+
+### Scheduler
+
+The scheduler takes in processes and stores them in the ready queue until it is full. If a process does not fit into the ready queue it is stored in the waiting queue.
+The scheduler uses a round robin approach. It takes each process and executes it for a certain time quantum (10 cycles).
+When there is room in the ready queue the scheduler uses a first fit algorithm to find the first process that can fit into the available space.
+
+### IO and Interrupts
+
+The IO command causes an interrupt, which pauses the process and puts it back at the end of the ready queue.
+The process get a random amount of time to wait for IO, during which it is blocked and will be skipped in the round robin.
+After the time to wait for IO runs out the process interrupts the current running process to resume running.
