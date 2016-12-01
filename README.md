@@ -15,18 +15,18 @@ Implementation of an operating system simulator
 * implement a series of operating system commands
 * create a log with details of executed operations
 
-## Program File Generation
+## [Program Documentation](./DOCUMENTATION.md)
+
+## Developer Notes
+
+### Program File Generation
 
 To generate some more random program files, simply open up `scripts/build_programs.html` in a web browser.
 
-## Commands
+### JAR File Generation
 
-* load <program name> - Load the specified program into the simulation.
-* exe <number of cycles> - Run the simulator for the given number of cycles.
-* exe - Run the simulator continuously. You can use "exe 0" to pause the simulation.
-* reset - Clear all programs and reset the clock to 0.
-* clear - Clear the text area.
-* mem - Print the amount of used memory to the screen.
-* exit - Closes the simulation.
+To rebuild `.jar`; in Intellij, `Build > Build Artifacts > Build`
 
-## 
+It might be required that you first setup some settings.
+`File > Project Structure > Project Settings > Artifacts > + > JAR > From module with dependencies`
+Then you may have to set the output path to the root directory of this project.
