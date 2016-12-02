@@ -1,5 +1,7 @@
 # CMSC 312 Operating System Simulator
 
+![Operating System Simulator](./screenshots/gui.png)
+
 ## Project Topic
 
 Implementation of an operating system simulator

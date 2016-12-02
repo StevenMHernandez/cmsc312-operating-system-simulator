@@ -16,6 +16,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.application.Application;
 
@@ -24,7 +26,9 @@ public class Gui extends Application {
 
     private Stage window;
     private BorderPane layout;
-    private HBox lowerBox;
+    private HBox upperBox;
+    private VBox lowerBox;
+    private HBox controls;
     private TextField textInput;
     private Button button, testbutton;
     private TableView readyTable;
@@ -44,7 +48,7 @@ public class Gui extends Application {
         window.setTitle("Simulator");
 
         button = new Button();
-        button.setText("test");
+        button.setText("enter");
         button.setOnAction(e -> {
             boolean valid = false;
             if(!textInput.getText().trim().equals(""))
@@ -112,14 +116,36 @@ public class Gui extends Application {
         textArea.setPrefColumnCount(50);
         textArea.autosize();
 
+        controls = new HBox();
+        controls.setSpacing(10);
+        controls.getChildren().addAll(textInput, button);
+
         layout = new BorderPane();
-        lowerBox = new HBox();
-        lowerBox.setPadding(new Insets(10, 10, 10, 10));
+
+        VBox waitingBox = new VBox();
+        waitingBox.setSpacing(10);
+        Text waitingTitle = new Text("Waiting Queue");
+        waitingTitle.setStyle("-fx-font-size: 18px");
+        waitingBox.getChildren().addAll(waitingTitle, waitingTable);
+
+        VBox readyBox = new VBox();
+        readyBox.setSpacing(10);
+        Text readyTitle = new Text("Ready Queue");
+        readyTitle.setStyle("-fx-font-size: 18px");
+        readyBox.getChildren().addAll(readyTitle, readyTable);
+
+        upperBox = new HBox();
+        upperBox.setSpacing(10);
+        upperBox.setPadding(new Insets(10, 10, 10, 10));
+        upperBox.getChildren().addAll(waitingBox, readyBox);
+
+        lowerBox = new VBox();
         lowerBox.setSpacing(10);
-        lowerBox.getChildren().addAll(textInput, button, textArea);
+        lowerBox.setPadding(new Insets(10, 10, 10, 10));
+        lowerBox.getChildren().addAll(textArea, controls);
+
+        layout.setTop(upperBox);
         layout.setBottom(lowerBox);
-        layout.setRight(readyTable);
-        layout.setLeft(waitingTable);
 
         Scene scene = new Scene(layout, 900, 600);
         window.setScene(scene);
